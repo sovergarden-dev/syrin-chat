@@ -20,6 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+        with:
+          enable-cache: false
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
