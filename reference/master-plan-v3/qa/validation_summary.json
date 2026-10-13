@@ -1,0 +1,16 @@
+{
+  "scope": "Offline configuration/policy reference only; no live OCR/API/Windows actions tested",
+  "tests_run": 186,
+  "passed": 186,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "example_config_errors": [],
+  "example_readiness_pending": [
+    "Chưa có profile thực tế được bật và cấp quyền.",
+    "Chưa có generation route/model được verify và bật.",
+    "Decision provider/model chưa được verify và bật."
+  ],
+  "real_world_gates_status": "G1–G9 pending",
+  "errata_mapped": 50
+}

@@ -1,0 +1,63 @@
+{
+  "id": "new_profile_template",
+  "enabled": false,
+  "sensitive_app": false,
+  "match": {
+    "process_name": "CHANGE_ME.exe",
+    "executable_path": null,
+    "window_class": null,
+    "window_title_pattern": null
+  },
+  "languages": [
+    "vi"
+  ],
+  "source": {
+    "adapters": [
+      "uia",
+      "ocr"
+    ],
+    "read_consent": false,
+    "access_policy_status": "unknown",
+    "native_identity_required_for_action": true
+  },
+  "ocr": {
+    "engine_id": "vietocr",
+    "model_artifact": null,
+    "charset_verified": false,
+    "roi": {
+      "anchor": "client",
+      "units": "normalized",
+      "x": 0.05,
+      "y": 0.65,
+      "w": 0.4,
+      "h": 0.25
+    },
+    "preprocess": "bakeoff_pending"
+  },
+  "attribution": {
+    "self_ids": [],
+    "self_names": [],
+    "unknown_speaker_policy": "no_action",
+    "use_sent_ledger": true
+  },
+  "policy": {
+    "tos_status": "unknown",
+    "tos_reviewed_at": null,
+    "tos_evidence_ref": null,
+    "protection_status": "unknown"
+  },
+  "autonomy": {
+    "requested_level": "L0",
+    "countdown_seconds": 4,
+    "recipient_allowlist": [],
+    "gate_report_ref": null
+  },
+  "send": {
+    "method": "none_user_types",
+    "verify_after_send": true,
+    "input_must_be_empty": true,
+    "auto_focus": false,
+    "verification_timeout_ms": 5000
+  },
+  "persona_prompt": "Trả lời ngắn gọn, tự nhiên, không bịa; không tự cam kết hoặc tiết lộ thông tin riêng."
+}

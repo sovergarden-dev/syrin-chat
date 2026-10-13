@@ -211,6 +211,14 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# Auto-Chat Agent local state and secrets
+config.local.json
+runtime/
+*.db
+*.db-shm
+*.db-wal
+artifacts/private/
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
