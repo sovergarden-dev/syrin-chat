@@ -1,0 +1,115 @@
+{
+  "version": "3.0",
+  "document_id": "SPEC-AUTO-CHAT-V3",
+  "date": "2026-10-13",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "stage": "personal_first",
+  "target_apps": [],
+  "confirmed_user_decisions": [
+    "Dùng cá nhân ổn trước, sau đó mới cân nhắc công khai.",
+    "Chưa chọn app/game; thử trên các ứng dụng đang dùng khi có bản dùng được.",
+    "Cách xử lý độ tin cậy thấp và mức tự động hóa phải có setting."
+  ],
+  "autonomy_levels": [
+    {"id": "L0", "name": "Tắt", "agent": "Không đọc, không gọi model, không thao tác app.", "user": "Chủ động bật profile."},
+    {"id": "L1", "name": "Chỉ đọc", "agent": "Đọc/tóm tắt khi đã được cấp quyền; không tạo hành động gửi.", "user": "Tự trả lời."},
+    {"id": "L2", "name": "Gợi ý", "agent": "Hiện bản nháp ở cửa sổ trợ lý; không điền vào app đích.", "user": "Tự chọn, tự gõ/dán và gửi."},
+    {"id": "L3", "name": "Điền bản nháp", "agent": "Chỉ điền bản đã duyệt, sau kiểm tra an toàn.", "user": "Tự nhấn gửi trong app đích."},
+    {"id": "L4", "name": "Tự gửi có đếm ngược", "agent": "Chỉ gửi bản hoàn chỉnh sau đếm ngược, trong phạm vi đã mở khóa.", "user": "Có mặt, có thể hủy; chọn rõ contact/nhóm được phép."}
+  ],
+  "hard_limits": {
+    "min_countdown_seconds": 3,
+    "recommended_countdown_seconds": 4,
+    "max_countdown_seconds": 30,
+    "max_permit_ttl_seconds": 10,
+    "max_sends_per_conversation_per_10min": 3,
+    "max_consecutive_agent_turns": 2,
+    "min_seconds_between_sends": 15,
+    "min_l2_reviews_for_l3": 200,
+    "min_acceptance_rate_for_l3": 0.70,
+    "min_shadow_trials_for_l4": 500,
+    "min_personal_active_days_before_public_review": 14,
+    "on_low_confidence": ["suggest_only", "skip", "ask_confirmation", "retry_stronger"]
+  },
+  "gates": [
+    {
+      "id": "G1",
+      "name": "OCR",
+      "threshold": "CER NFC ≤ 10% cho L2; ≤ 3% (app) / ≤ 6% (game được phép) trước L3+; kiểm riêng tên/người nhận và ký tự quan trọng.",
+      "method": "≥ 500 dòng ảnh thật/profile, ≥ 3 cỡ chữ; tách tập hiệu chỉnh và tập kiểm thử.",
+      "required_for": "Profile dùng OCR; không áp dụng cho nguồn text có cấu trúc.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G2",
+      "name": "Transcript",
+      "threshold": "Phát hiện tin mới: precision ≥ 99.5%, recall ≥ 98%; phát trùng ≤ 0.1%.",
+      "method": "≥ 2 giờ replay/profile; cuộn, wrap, đổi kênh, popup, lặp lại cùng một câu.",
+      "required_for": "Nguồn đọc được dùng để đề xuất hoặc hành động.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G3",
+      "name": "Người nói",
+      "threshold": "Precision đối phương trên tin kích hoạt trả lời ≥ 99.9%; self-loop quan sát = 0.",
+      "method": "≥ 1,000 tình huống có nhãn, gồm giả mạo tên và copy đúng nội dung tin của mình.",
+      "required_for": "L2 trở lên; danh tính không rõ luôn chặn L3/L4.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G4",
+      "name": "Decision",
+      "threshold": "F1 needs_reply/addressed ≥ 0.85; ECE ≤ 0.05 sau hiệu chỉnh; P95 decision mục tiêu ≤ 700 ms.",
+      "method": "≥ 1,000 tình huống tiếng Việt có nhãn; có dấu/không dấu/teencode; đo từ mạng dùng thật.",
+      "required_for": "Định tuyến tự động; bắt buộc hiệu chỉnh trước L4.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G5",
+      "name": "Generation",
+      "threshold": "Chấp nhận không sửa ≥ 70% trên ≥ 200 lượt L2 trước L3; 0 vi phạm quan sát trên ≥ 200 red-team.",
+      "method": "Đánh giá thủ công; riêng cam kết, tiền, OTP, PII, sức khỏe/pháp lý và hỏi có phải AI.",
+      "required_for": "L3/L4; không dùng confidence do LLM tự khai làm bằng chứng duy nhất.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G6",
+      "name": "Action",
+      "threshold": "Misfire quan sát = 0/10,000 test; hủy P99 mục tiêu ≤ 50 ms; xác minh sau gửi ≥ 99%; 0 retry mù.",
+      "method": "Windows harness: Alt+Tab, đổi kênh, HWND/PID tái sử dụng, input chen ngang, timeout, crash.",
+      "required_for": "L3/L4; ≥ 500 shadow trials/profile/contact, 0 would-have-misfired trước L4.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G7",
+      "name": "Tài nguyên",
+      "threshold": "Mục tiêu ban đầu: CPU idle ≤ 3%; RAM core/UI ≤ 500 MB, báo riêng model worker; FPS giảm ≤ 2%.",
+      "method": "Máy cá nhân tham chiếu và app/game thực tế được chọn sau; ghi cấu hình, baseline, n và khoảng dao động.",
+      "required_for": "Mốc dùng cá nhân ổn; không ép có sẵn 3 game.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G8",
+      "name": "Bảo mật",
+      "threshold": "0 key plaintext, 0 nội dung chat trong log vận hành; PII recall mục tiêu ≥ 95%, báo cả precision; dependency có nguồn/hash/license.",
+      "method": "Bộ PII Việt Nam + quét build/log; thử lỗi mã hóa, lỗi credential store và cập nhật giả mạo.",
+      "required_for": "Dùng cá nhân; ký số/updater bắt buộc bổ sung ở mốc công khai.",
+      "status": "Chưa đo"
+    },
+    {
+      "id": "G9",
+      "name": "Quyền và tuân thủ",
+      "threshold": "Cấp quyền theo profile; ma trận ToS có ngày review; công bố AI ở L4; không đọc/gửi vượt quyền.",
+      "method": "Review từng tích hợp. Trước công khai: thêm review pháp lý, quyền dữ liệu, license và công bố quyền.",
+      "required_for": "Cá nhân có kiểm tra nền tảng; công khai có checklist riêng.",
+      "status": "Chưa review"
+    }
+  ],
+  "latency_targets": [
+    {"metric": "T_detect — nguồn cấu trúc", "definition": "Tin trở nên đọc được → MessageEvent ổn định.", "target": "P95 ≤ 300 ms"},
+    {"metric": "T_detect — OCR", "definition": "Tin hiện trong ROI → MessageEvent ổn định.", "target": "P95 ≤ 1.2 s"},
+    {"metric": "T_suggest", "definition": "Turn được chốt → bản nháp đầy đủ, đã qua guard.", "target": "P95 ≤ 2.5 s"},
+    {"metric": "T_send", "definition": "Duyệt/hết countdown → xác minh thấy tin gửi.", "target": "P95 ≤ 1 s; đo riêng từng adapter"},
+    {"metric": "T_cancel", "definition": "Nhận lệnh hủy → invalidation token và chặn hành động còn chờ.", "target": "P99 ≤ 50 ms"}
+  ]
+}

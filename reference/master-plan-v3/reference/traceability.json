@@ -1,0 +1,307 @@
+{
+  "baseline": "2.4",
+  "target": "3.0",
+  "meaning": "Đã sửa đặc tả, không phải 50 product fixes đã được integration-test.",
+  "records": [
+    {
+      "erratum": "A1",
+      "applied_to_spec": true,
+      "location": "§5 OCR; schema profile",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "A2",
+      "applied_to_spec": true,
+      "location": "§5 charset/bake-off",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "A3",
+      "applied_to_spec": true,
+      "location": "§5 preprocessing",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "A4",
+      "applied_to_spec": true,
+      "location": "§11 perf; §5 capture",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "A5",
+      "applied_to_spec": true,
+      "location": "§4.2/5 ROI; validator",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "A6",
+      "applied_to_spec": true,
+      "location": "§5 overlay",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B1",
+      "applied_to_spec": true,
+      "location": "§6.2/6.3 registry",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B2",
+      "applied_to_spec": true,
+      "location": "§6.2 Jev role",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B3",
+      "applied_to_spec": true,
+      "location": "§11 measured latency/cost",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B4",
+      "applied_to_spec": true,
+      "location": "§6.2 VN eval",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B5",
+      "applied_to_spec": true,
+      "location": "§6.2 fan-out",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B6",
+      "applied_to_spec": true,
+      "location": "§6.1 rule; §6.2 calibration",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "B7",
+      "applied_to_spec": true,
+      "location": "§9 official dependencies",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C1",
+      "applied_to_spec": true,
+      "location": "§6.3 model verification",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C2",
+      "applied_to_spec": true,
+      "location": "§6.3 output budget",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C3",
+      "applied_to_spec": true,
+      "location": "§6.3 capability registry",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C4",
+      "applied_to_spec": true,
+      "location": "§6.3 no invented replacement ID",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C5",
+      "applied_to_spec": true,
+      "location": "§11 usage + dated pricing",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C6",
+      "applied_to_spec": true,
+      "location": "§9 data policy/consent",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C7",
+      "applied_to_spec": true,
+      "location": "§12 provider interface",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "C8",
+      "applied_to_spec": true,
+      "location": "§12 local bake-off",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D1",
+      "applied_to_spec": true,
+      "location": "§8 input risk; không dùng mouse flag cho keyboard",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D2",
+      "applied_to_spec": true,
+      "location": "§1/2 Zero-Evasion",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D3",
+      "applied_to_spec": true,
+      "location": "§1/2 no driver",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D4",
+      "applied_to_spec": true,
+      "location": "§1/2 no evasion jitter",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D5",
+      "applied_to_spec": true,
+      "location": "§8 clipboard",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D6",
+      "applied_to_spec": true,
+      "location": "§8 RegisterHotKey",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D7",
+      "applied_to_spec": true,
+      "location": "§8 modifier hotkeys",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D8",
+      "applied_to_spec": true,
+      "location": "§7 presence/allowlist",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D9",
+      "applied_to_spec": true,
+      "location": "§7 L2 manual-only",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D10",
+      "applied_to_spec": true,
+      "location": "§8 permit/verify",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D11",
+      "applied_to_spec": true,
+      "location": "§4.2 process binding",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "D12",
+      "applied_to_spec": true,
+      "location": "§7 protected cap; schema/validator",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "E1",
+      "applied_to_spec": true,
+      "location": "§9 source review; không active repo rủi ro",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "E2",
+      "applied_to_spec": true,
+      "location": "§5/12 capture upstream review",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "E3",
+      "applied_to_spec": true,
+      "location": "§15 authoritative sources",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "E4",
+      "applied_to_spec": true,
+      "location": "§9 SDK/pin/hash/SBOM",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F1",
+      "applied_to_spec": true,
+      "location": "§11 metric definitions",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F2",
+      "applied_to_spec": true,
+      "location": "§1/2 bỏ jitter",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F3",
+      "applied_to_spec": true,
+      "location": "§8/11 cancellation",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F4",
+      "applied_to_spec": true,
+      "location": "§10 sampled precision, no 100% claim",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F5",
+      "applied_to_spec": true,
+      "location": "§11 targets unmeasured",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F6",
+      "applied_to_spec": true,
+      "location": "Master Plan TOC generated from headings",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F7",
+      "applied_to_spec": true,
+      "location": "§7 earned autonomy",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "F8",
+      "applied_to_spec": true,
+      "location": "§10/11 evidence status",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "G1",
+      "applied_to_spec": true,
+      "location": "schema đủ field và additionalProperties",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "G2",
+      "applied_to_spec": true,
+      "location": "schema + semantic cross-field validator",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "G3",
+      "applied_to_spec": true,
+      "location": "credential_ref only",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "G4",
+      "applied_to_spec": true,
+      "location": "modifier hotkey schema + collision validation",
+      "product_validation": "pending_where_applicable"
+    },
+    {
+      "erratum": "G5",
+      "applied_to_spec": true,
+      "location": "verified model/capability registry; no unchecked string activation",
+      "product_validation": "pending_where_applicable"
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "version": "3.0",
+  "package_kind": "Specification + offline reference tests, not a finished Windows app",
+  "file_count_without_manifest": 33,
+  "files": [
+    {
+      "path": "AUDIT_CHECKLIST.md",
+      "size_bytes": 8855,
+      "sha256": "60e4a321094ebcb5e16437d0b2a936f76b5161645da52db05b43440dbfa9e183"
+    },
+    {
+      "path": "AUTO_CHAT_AGENT_MASTER_PLAN.md",
+      "size_bytes": 31756,
+      "sha256": "d37353a657a5c891c0ccd1d20f763dff701f913dab05db0c147b9c7e58eedc6b"
+    },
+    {
+      "path": "Auto-Chat-Agent-Master-Plan-V3.pdf",
+      "size_bytes": 342803,
+      "sha256": "28e0475a6f6cb002aa8df834c91bf44ccc58a747a45192c4a06e0f9a93ed29f5"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "size_bytes": 2633,
+      "sha256": "93c378b327e20aea55d3d23e79060ee482f47137900a12c05f5be075c2d88ab4"
+    },
+    {
+      "path": "DECISIONS_AND_ASSUMPTIONS.md",
+      "size_bytes": 4334,
+      "sha256": "28b92d482674f8c6a33429f13e5f6af4bf377fc58cb14dd2bc35dcdcbb4fdeb5"
+    },
+    {
+      "path": "Nghiên cứu Auto-Chat Agent.html",
+      "size_bytes": 42873,
+      "sha256": "996fb70dc47d50455056b00897bec836a5690448e3862747cd7b968043a48657"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 3080,
+      "sha256": "e1b7d10b24b68d10f483303d6f63ab5fe920e0353f9f648ee7fc11ad500c1067"
+    },
+    {
+      "path": "SETTINGS_SPEC.md",
+      "size_bytes": 7473,
+      "sha256": "b9d775291732ce54b73c7f63f8806389b8dafbb76a293cbb0d906d47895240ad"
+    },
+    {
+      "path": "bench/README.md",
+      "size_bytes": 1069,
+      "sha256": "b51b670c7b0b1126e66036092ac841703721180596bc605b02127c71e6018c31"
+    },
+    {
+      "path": "bench/ocr_vi_bench.py",
+      "size_bytes": 11940,
+      "sha256": "7528590f9f86b772d8696ad95949c9ad9986032eb7a5277844fc1a82d2921e79"
+    },
+    {
+      "path": "config.example.json",
+      "size_bytes": 4740,
+      "sha256": "9940268e970f52c773d04dadd537606ba5fcdaaeab2aef16831afeff938b6084"
+    },
+    {
+      "path": "model_registry.example.json",
+      "size_bytes": 39,
+      "sha256": "3b6a289c454894c0a66d71a7a1fd4f50a8847744bcfa8d264c1beff251cc76ea"
+    },
+    {
+      "path": "policy_core.py",
+      "size_bytes": 15839,
+      "sha256": "5ea896342070e8802f068384be4218fd4e15e4ad6333f220991919ce5ba1559b"
+    },
+    {
+      "path": "profile.template.json",
+      "size_bytes": 1445,
+      "sha256": "6eb18cba1a3ac7dc70a2027c43936cfcfe16dd6bc4cccb9b8c073210ae04dc46"
+    },
+    {
+      "path": "profiles.schema.json",
+      "size_bytes": 29440,
+      "sha256": "cfcd55210eb14fb2cc05933c44ae441c9642017852fd4b8940151877f81ffc30"
+    },
+    {
+      "path": "project.json",
+      "size_bytes": 6767,
+      "sha256": "628d7e32bf56d6bcecf6765e9e4502cd2c27347d175eef02994752af35110988"
+    },
+    {
+      "path": "qa/pdf_rebuild_comparison.json",
+      "size_bytes": 66,
+      "sha256": "a0d54fcfe37ab1fd7d90ce69e99ffc5c11165df42c86abb31c2bded512e8ec25"
+    },
+    {
+      "path": "qa/structural_summary.json",
+      "size_bytes": 119,
+      "sha256": "9dc2fdc200fe708e5c0b9a9cbf26390b0902507f2aba16d98f4cf09784121fd8"
+    },
+    {
+      "path": "qa/test_results.txt",
+      "size_bytes": 18529,
+      "sha256": "1d5f6c8ace3a0a865971a0652bd3e2cc336a7741756262d1eff847fba2e65093"
+    },
+    {
+      "path": "qa/validation_summary.json",
+      "size_bytes": 527,
+      "sha256": "ec1e1138da2bb8a4c6f5b7af85198109a2efab3956e31d002b14da754e72520e"
+    },
+    {
+      "path": "qa/visual_review.md",
+      "size_bytes": 1958,
+      "sha256": "537b208c55418c46c60e1789ad09947fa754afc54199889ebe25b6d40751b555"
+    },
+    {
+      "path": "reference/README.md",
+      "size_bytes": 631,
+      "sha256": "a7cb3452f1d8e271b091497bb96189e7871c5a155b16fdb692e4a61ea039b78a"
+    },
+    {
+      "path": "reference/THAM_DINH_Auto-Chat-Agent_v2.4.md",
+      "size_bytes": 77243,
+      "sha256": "d14cc1274b578577465ab972f356723ee687c0eded8d52950a48b46157694733"
+    },
+    {
+      "path": "reference/bench/ocr_vi_benchmark_chart.png",
+      "size_bytes": 124178,
+      "sha256": "633b17eb443bcbf3bbd7e6b1ff767dc41962a828392eda6a178c0c181d59c30b"
+    },
+    {
+      "path": "reference/bench/ocr_vi_samples.png",
+      "size_bytes": 157488,
+      "sha256": "8125d4468de2a2c03e59d5c1fc846b720137261b89ccf8445b29e874864f0e44"
+    },
+    {
+      "path": "reference/decision_gate_jev_unverified.py",
+      "size_bytes": 9276,
+      "sha256": "2b102dcafe9af693ad26e7ea2e074e2a65ea790181a0a1304bbf6b8f1110556c"
+    },
+    {
+      "path": "reference/traceability.json",
+      "size_bytes": 8619,
+      "sha256": "d684713b3850d53541e6ca6792a102a8d510588a32654e9a41872ef4ed44ebff"
+    },
+    {
+      "path": "requirements-docs.txt",
+      "size_bytes": 49,
+      "sha256": "deeb98d45b827602ea4af676f447f2681de103dd0c0910ec831211e134347e5b"
+    },
+    {
+      "path": "scripts/build_documents.py",
+      "size_bytes": 36305,
+      "sha256": "49752bea864ed2c3e47012be2e05d409a49ed97d6d1db50af2a402a627443242"
+    },
+    {
+      "path": "scripts/run_checks.py",
+      "size_bytes": 1740,
+      "sha256": "66a454090866f4442fe606c0dc0ce0ab58897db069b5128299f0d73967a58374"
+    },
+    {
+      "path": "scripts/validate_config.py",
+      "size_bytes": 14083,
+      "sha256": "4edb8372f9a9ff6da026563299e96713070670daa9ae43f53f25df6626f11f0d"
+    },
+    {
+      "path": "tests/test_config.py",
+      "size_bytes": 16071,
+      "sha256": "1bfb9a5b288b2e13a83b1bd23d0b975803b8ecba05f74b8de4b854da184f7ea2"
+    },
+    {
+      "path": "tests/test_policy.py",
+      "size_bytes": 15204,
+      "sha256": "a16f3094bd81376faf43bc0c9f04b48773dce3ace581bf0eee064495a541f0ab"
+    }
+  ]
+}

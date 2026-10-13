@@ -1,0 +1,174 @@
+{
+  "$schema": "./profiles.schema.json",
+  "version": "3.0",
+  "global_settings": {
+    "default_requested_level_after_wizard": "L2",
+    "start_paused": true,
+    "resume_action_after_restart": false,
+    "kill_switch_hotkey": "Ctrl+Alt+Shift+F12",
+    "cancel_hotkey": "Ctrl+Alt+F12",
+    "send_now_hotkey": "Ctrl+Alt+F11",
+    "presence": {
+      "required_for_autosend": true,
+      "idle_threshold_seconds": 60,
+      "cancel_on_user_input": true
+    },
+    "ai_disclosure": {
+      "enabled": true,
+      "text": " · (trợ lý AI)",
+      "answer_honestly_if_asked": true
+    },
+    "storage": {
+      "mode": "memory_only",
+      "database_path": "%LOCALAPPDATA%\\AutoChatAgent\\transcripts.db",
+      "encryption": "sqlcipher_dpapi",
+      "retention_days": 7,
+      "store_screenshots": false
+    },
+    "logging": {
+      "level": "INFO",
+      "log_message_content": false,
+      "sdk_debug_logging": false
+    },
+    "privacy": {
+      "cloud_text_consent": false,
+      "cloud_provider_allowlist": [],
+      "pii_redaction_required": true,
+      "style_learning_enabled": false,
+      "sensitive_process_denylist": [
+        "KeePassXC.exe",
+        "1Password.exe",
+        "Bitwarden.exe"
+      ]
+    },
+    "budget": {
+      "currency": "USD",
+      "daily_usd": null,
+      "monthly_usd": null,
+      "on_exceeded": "pause_cloud_calls"
+    },
+    "rate_limits": {
+      "max_sends_per_conversation_per_10min": 3,
+      "max_consecutive_agent_turns": 2,
+      "min_seconds_between_sends": 15,
+      "duplicate_attempt_window_minutes": 10
+    },
+    "quiet_hours": {
+      "enabled": false,
+      "start": "23:00",
+      "end": "07:00",
+      "timezone": "Asia/Ho_Chi_Minh"
+    }
+  },
+  "providers": {
+    "typesafe": {
+      "kind": "typesafe_official",
+      "enabled": false,
+      "credential_ref": "wincred:AutoChatAgent/typesafe",
+      "base_url": null,
+      "data_policy_status": "not_reviewed"
+    },
+    "gemini": {
+      "kind": "gemini_official",
+      "enabled": false,
+      "credential_ref": "wincred:AutoChatAgent/gemini",
+      "base_url": null,
+      "data_policy_status": "not_reviewed"
+    },
+    "custom": {
+      "kind": "openai_compatible",
+      "enabled": false,
+      "credential_ref": "wincred:AutoChatAgent/custom",
+      "base_url": null,
+      "data_policy_status": "not_reviewed"
+    },
+    "local": {
+      "kind": "ollama_local",
+      "enabled": false,
+      "credential_ref": null,
+      "base_url": "http://127.0.0.1:11434",
+      "data_policy_status": "local_only"
+    }
+  },
+  "perception": {
+    "capture_backend": "windows_graphics_capture",
+    "fallback_capture_backend": "dxgi_dxcam",
+    "max_capture_hz": 4,
+    "exclude_own_overlays": true,
+    "stable_frames_required": 2,
+    "normalized_roi_required": true,
+    "detect_scroll_and_wrap": true,
+    "on_source_unavailable": "pause_profile"
+  },
+  "turn_taking": {
+    "min_wait_ms": 700,
+    "max_wait_ms": 4000,
+    "use_typing_indicator_if_available": true,
+    "cancel_draft_on_new_message": true,
+    "on_incomplete_at_max_wait": "ask_confirmation"
+  },
+  "decision": {
+    "enabled": false,
+    "provider_id": "typesafe",
+    "model_id": null,
+    "timeout_ms": 1500,
+    "question_set": "chat_gate_vi_v1",
+    "on_low_confidence": "suggest_only",
+    "on_error": "suggest_only",
+    "on_timeout": "suggest_only",
+    "stronger_route_id": "stronger",
+    "max_stronger_retries": 1,
+    "requires_calibration_for_autosend": true,
+    "thresholds": {
+      "min_decision_confidence": 0.85,
+      "addressed_to_me": 0.6,
+      "needs_reply": 0.6,
+      "turn_complete": 0.6,
+      "hazard_escalate": 0.3,
+      "reflex_choice_confidence": 0.9
+    }
+  },
+  "generation": {
+    "routes": {
+      "fast": {
+        "enabled": false,
+        "provider_id": "gemini",
+        "model_id": null,
+        "max_output_tokens": 1024,
+        "thinking_level": null,
+        "timeout_ms": 10000
+      },
+      "complex": {
+        "enabled": false,
+        "provider_id": "gemini",
+        "model_id": null,
+        "max_output_tokens": 2048,
+        "thinking_level": null,
+        "timeout_ms": 10000
+      },
+      "stronger": {
+        "enabled": false,
+        "provider_id": "custom",
+        "model_id": null,
+        "max_output_tokens": 2048,
+        "thinking_level": null,
+        "timeout_ms": 10000
+      },
+      "local_private": {
+        "enabled": false,
+        "provider_id": "local",
+        "model_id": null,
+        "max_output_tokens": 512,
+        "thinking_level": null,
+        "timeout_ms": 10000
+      }
+    },
+    "candidates": 1,
+    "reply_max_chars": 160,
+    "structured_output": true,
+    "streaming_preview": true,
+    "output_guard": true,
+    "send_partial_stream": false
+  },
+  "profiles": []
+}

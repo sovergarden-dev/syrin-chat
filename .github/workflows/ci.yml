@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test P0 replay core
+        run: uv run --python ${{ matrix.python-version }} python -m unittest discover -s tests -v
+      - name: Verify frozen V3 reference suite
+        run: uv run --python ${{ matrix.python-version }} --with jsonschema==4.25.1 --with tzdata==2025.2 python -m unittest discover -s reference/master-plan-v3/tests -v

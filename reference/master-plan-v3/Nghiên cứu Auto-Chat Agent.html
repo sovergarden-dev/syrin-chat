@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Auto-Chat Agent — Master Plan V3</title><style>
+:root {color-scheme:light dark;--bg:#fff;--surface:#f9f8f7;--text:#2c2c2b;
+ --muted:#605d59;--border:#e6e5e3;--blue:#1d65b0;--soft:#e5f2fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+ font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.page{max-width:1080px;margin:auto;padding:40px 32px 64px}
+.intro{padding:24px;border:1px solid var(--border);background:var(--surface);
+ border-top:4px solid var(--blue);border-radius:8px;margin-bottom:32px}
+.eyebrow{font-size:14px;color:var(--blue);font-weight:700;letter-spacing:.06em}
+.intro h1{font-size:32px;line-height:1.2;margin:8px 0 12px}
+.intro p{margin:4px 0}
+.status{font-size:14px;color:var(--muted)}
+nav{border:1px solid var(--border);padding:20px 24px;border-radius:8px;margin-bottom:32px}
+nav strong{display:block;margin-bottom:8px}
+nav ol{columns:2;column-gap:32px;margin:0;padding-left:0;font-size:14px;list-style:none}
+nav li{break-inside:avoid;margin:0 0 4px}
+nav a{display:block;min-height:44px;padding:8px 0}
+a{color:var(--blue);overflow-wrap:anywhere}
+a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+article{max-width:760px;margin:auto}
+article>h1{font-size:28px;line-height:1.25}
+h2{font-size:24px;line-height:1.3;margin:40px 0 16px;padding-top:8px;
+ border-bottom:1px solid var(--border);padding-bottom:12px}
+h3{font-size:19px;line-height:1.4;margin:24px 0 12px}
+p,ul,ol{margin:12px 0}
+li{margin:6px 0}
+pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+ padding:16px;overflow:auto;font:13px/1.5 Consolas,monospace}
+code{font-size:.88em;overflow-wrap:anywhere}
+pre code{font:inherit;white-space:pre}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;line-height:1.55;
+ table-layout:fixed}
+th,td{padding:12px;border:1px solid var(--border);vertical-align:top;overflow-wrap:anywhere}
+th{text-align:left;background:var(--soft);color:var(--text)}
+.table-wrap{overflow-x:auto}
+blockquote{border-left:4px solid var(--blue);margin:16px 0;padding:8px 20px;background:var(--surface)}
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--border);padding-top:16px;margin-top:40px}
+@media(prefers-color-scheme:dark){:root{--bg:#191919;--surface:#202020;--text:#f5f5f5;
+ --muted:#c0bdb8;--border:#47443f;--blue:#83bcff;--soft:#263647}}
+@media(max-width:600px){.page{padding:24px 16px 40px}.intro{padding:20px}
+ .intro h1{font-size:28px}nav{padding:16px}nav ol{columns:1}
+ h2{font-size:23px}table{min-width:660px}pre{font-size:13px}
+ .table-wrap::before{content:"Bảng rộng — vuốt ngang để xem đủ.";display:block;
+  font-size:14px;color:var(--muted);margin:8px 0 0}}
+@media print{
+ :root{color-scheme:light;--bg:#fff;--surface:#f9f8f7;--text:#2c2c2b;
+ --muted:#605d59;--border:#d4d1cd;--blue:#1d65b0;--soft:#e5f2fc}
+ @page{size:A4;margin:16mm 15mm 17mm;
+  @bottom-left{content:"AUTO-CHAT AGENT · V3.0";font:9pt Arial,sans-serif;color:#605d59}
+  @bottom-right{content:counter(page) " / " counter(pages);font:9pt Arial,sans-serif;color:#605d59}}
+ body{font:11pt/1.45 Arial,sans-serif}
+ .page{max-width:none;padding:0}
+ .intro{padding:6mm;margin-bottom:8mm}
+ .intro h1{font-size:24pt}
+ .eyebrow,.status,nav{font-size:9pt}
+ nav{padding:5mm;margin-bottom:8mm}
+ nav ol{columns:2;font-size:9pt}
+ nav a{text-decoration:none;color:#2c2c2b;min-height:0;padding:0}
+ article{max-width:none}
+ article>h1{display:none}
+ h2{font-size:16pt;margin:8mm 0 4mm;break-after:avoid}
+ h3{font-size:13pt;margin:6mm 0 3mm;break-after:avoid}
+ p,ul,ol{margin:3mm 0}
+ p{orphans:3;widows:3}
+ li{margin:1.5mm 0}
+ pre{font:9pt/1.4 Consolas,monospace;white-space:pre-wrap;
+  overflow:visible;padding:4mm;break-inside:avoid}
+ pre code{white-space:pre-wrap;overflow-wrap:anywhere}
+ table{font-size:9pt;line-height:1.4;min-width:0;table-layout:fixed}
+ col{width:auto!important}
+ th,td{padding:2.5mm}
+ tr{break-inside:avoid}
+ thead{display:table-header-group}
+ .table-wrap{overflow:visible}
+ .table-wrap::before{display:none}
+ a{color:#1d65b0}
+ footer{font-size:9pt}
+}
+</style></head>
+<body><main class="page">
+<header class="intro"><div class="eyebrow">SPEC • V3.0 • WINDOWS</div>
+<h1>Trợ lý chat AI.<br>Cá nhân trước, công khai sau.</h1>
+<p>Profile chọn sau · Setting có kiểm soát · Tự chủ theo bằng chứng</p>
+<p class="status">13/10/2026 · Đặc tả triển khai — chưa phải sản phẩm đã kiểm chứng.</p></header>
+<nav aria-label="Mục lục"><strong>Đọc theo mục</strong><ol><li><a href="#section-1">0. Quyết định đã chốt</a></li><li><a href="#section-2">1. Mục tiêu · Đầu vào · Phạm vi · Đầu ra · Xong khi · Ràng buộc</a></li><li><a href="#section-3">2. Nguyên tắc và yêu cầu sản phẩm</a></li><li><a href="#section-4">3. Kiến trúc đích</a></li><li><a href="#section-5">4. Adapter và profile chọn sau</a></li><li><a href="#section-6">5. OCR và dựng transcript</a></li><li><a href="#section-7">6. Hai tầng AI, rule và turn-taking</a></li><li><a href="#section-8">7. Setting và thang tự chủ</a></li><li><a href="#section-9">8. State machine và thao tác an toàn</a></li><li><a href="#section-10">9. Bảo mật, dữ liệu và quyền riêng tư</a></li><li><a href="#section-11">10. Nghiệm thu theo gate</a></li><li><a href="#section-12">11. Độ trễ và chi phí</a></li><li><a href="#section-13">12. Tech stack và lộ trình cá nhân</a></li><li><a href="#section-14">13. Công khai là một mốc riêng</a></li><li><a href="#section-15">14. Bộ bàn giao và việc còn phải chứng minh</a></li><li><a href="#section-16">15. Nguồn và cách cập nhật</a></li></ol></nav>
+<article><h1>Auto-Chat Agent — Master Plan V3</h1>
+<p><strong>Mã:</strong> SPEC-AUTO-CHAT-V3 · <strong>Phiên bản:</strong> 3.0 · <strong>Ngày:</strong> 13/10/2026<br />
+<strong>Định vị:</strong> Trợ lý chat AI đa ứng dụng trên Windows, ưu tiên dùng cá nhân.<br />
+<strong>Trạng thái:</strong> Đặc tả đã sửa; chưa phải sản phẩm đã triển khai hoặc chứng nhận an toàn.</p>
+<h2 id="section-1">0. Quyết định đã chốt</h2>
+<ol>
+<li>Làm bản <strong>dùng cá nhân ổn trước</strong>. Chỉ cân nhắc công khai sau mốc nghiệm thu cá nhân và một quyết định phát hành riêng.</li>
+<li><strong>Chưa chốt app/game.</strong> Lõi, giao thức adapter và test harness không phụ thuộc tên app. Khi có prototype dùng được, thêm profile cho ứng dụng đang dùng lúc đó.</li>
+<li><strong>Có setting</strong> cho mức tự động hóa, xử lý độ tin cậy thấp, provider/model, persona, quyền riêng tư và ngân sách.</li>
+</ol>
+<p>Không cần người dùng chọn ba app ngay. Nhưng không được đợi đến cuối mới kiểm thử: dùng mock/replay từ đầu, rồi kiểm thử tích hợp thực tế trước khi tuyên bố hỗ trợ một profile.</p>
+<h2 id="section-2">1. Mục tiêu · Đầu vào · Phạm vi · Đầu ra · Xong khi · Ràng buộc</h2>
+<h3>Mục tiêu</h3>
+<p>Giảm thao tác đọc và trả lời chat khi người dùng bận, vẫn giữ quyền kiểm soát. Hệ thống hiểu hội thoại tiếng Việt, đề xuất câu trả lời phù hợp và chỉ thao tác app khi người dùng đã cho phép, tích hợp đã được kiểm chứng.</p>
+<h3>Đầu vào</h3>
+<ul>
+<li>Windows 11, tài khoản và ứng dụng người dùng được quyền sử dụng.</li>
+<li>Profile chọn cửa sổ, nguồn đọc, vùng chat/ô nhập nếu cần OCR, danh tính của mình và contact/nhóm cho phép.</li>
+<li>Tin nhắn đọc được qua nguồn hợp lệ; persona và setting do người dùng chọn.</li>
+<li>Credential qua kho bí mật của Windows nếu dùng API; cloud chỉ bật sau consent và cấu hình ngân sách.</li>
+<li>Cấu hình máy, app thực tế và ngân sách: <strong>chưa được cung cấp</strong>, không tự đoán.</li>
+</ul>
+<h3>Phạm vi</h3>
+<p><strong>MVP cá nhân:</strong> thiết lập profile, đọc hội thoại, dựng transcript, Jev decision gate, LLM sinh câu, gợi ý L1/L2, hủy, telemetry tối thiểu và shadow mode.<br />
+<strong>Sau MVP:</strong> OCR theo profile, L3 điền bản đã duyệt; L4 đếm ngược chỉ ở tích hợp đủ điều kiện.<br />
+<strong>Sau khi dùng ổn:</strong> hardening và quyết định công khai. Không gộp phát hành rộng vào tiêu chí MVP.</p>
+<h3>Đầu ra</h3>
+<ul>
+<li>App desktop có màn hình trạng thái và lý do không gửi; bộ profile có thể thêm về sau.</li>
+<li><code>MessageEvent</code>, <code>Draft</code>, <code>SendPermit</code> và sổ lần gửi có cấu trúc.</li>
+<li>Báo cáo đo kiểm theo từng profile, không phải một điểm số “universal” chung.</li>
+<li>Bộ cài cá nhân khi đủ điều kiện; tài liệu/quyền/SBOM phù hợp phạm vi phát hành.</li>
+</ul>
+<h3>Xong khi</h3>
+<p>Người dùng sử dụng được trên ít nhất một ứng dụng thực tế được chọn về sau; ≥ 14 ngày sử dụng có hoạt động, không có sự cố nghiêm trọng chưa xử lý; các gate áp dụng cho tính năng được bật đều đạt. Nếu chỉ dùng L2 thì không phải mở L4 để coi là đạt mốc cá nhân.</p>
+<h3>Ràng buộc</h3>
+<ul>
+<li>Không hứa hỗ trợ mọi app/game, “zero-ban”, “zero-data-leak”, “100% chính xác” hoặc độ trễ chưa đo.</li>
+<li>Không né anti-cheat, không driver giả lập phần cứng, không micro-jitter để che dấu tự động hóa.</li>
+<li>Không spam/broadcast, không tự cam kết tiền/hẹn/quyết định, không tự trả lời khi không giám sát.</li>
+<li>Không mặc định đọc app mới, lưu ảnh thật hay gửi hội thoại lên cloud.</li>
+<li>Người dùng chọn <strong>mức mong muốn</strong>; mức thực thi còn bị giới hạn bởi quyền nền tảng và bằng chứng kiểm thử.</li>
+</ul>
+<h2 id="section-3">2. Nguyên tắc và yêu cầu sản phẩm</h2>
+<p><strong>Human-in-control:</strong> app mới ở L0; sau wizard có thể dùng L1/L2. Không âm thầm bật lại L3/L4 sau restart, lỗi cấu hình hoặc thay đổi adapter/model quan trọng.</p>
+<p><strong>Fail-closed:</strong> không rõ người nói, hội thoại, target, trạng thái input hoặc kết quả gửi thì không gửi. UI phải cho biết lý do, không treo im lặng.</p>
+<p><strong>Zero-Evasion:</strong> chỉ dùng giao diện/API được phép. Suggest-only không tự động làm một nền tảng cấm bot trở thành nền tảng cho phép automation.</p>
+<p><strong>Local-first:</strong> mặc định network tắt, transcript ở RAM, log không có nội dung chat, học giọng tắt. Chỉ gửi text tối thiểu khi consent và chính sách provider đã được review.</p>
+<p><strong>Measure-first:</strong> mọi ngưỡng bên dưới là <strong>tiêu chí đề xuất</strong>, không phải kết quả đã đạt. Hỗ trợ được ghi theo app/version/source/autonomy, không theo tên app chung chung.</p>
+<p><strong>Honest AI:</strong> không phủ nhận là AI. L4 bật disclosure; không tự cam kết thay người dùng. Suffix cũng phải được kiểm tra độ dài và guard như phần còn lại của câu.</p>
+<h2 id="section-4">3. Kiến trúc đích</h2>
+<pre><code class="language-text">Nguồn được phép: API / UIA / thông báo / DOM / log / OCR
+                         |
+                 MessageEvent chuẩn hóa
+                         |
+          Transcript + speaker + occurrence dedupe
+                         |
+               Turn-taking và rule cứng
+                         |
+       Jev decision gate — một request fan-out
+                         |
+           LLM sinh Draft hoặc chọn câu mẫu
+                         |
+              Output guard + disclosure
+                         |
+       L1/L2: cửa sổ trợ lý, không sửa app đích
+       L3/L4: qualification + duyệt/countdown
+                         |
+            SendPermit dùng một lần
+                         |
+     Actuator → xác minh → attempt/sent ledger
+</code></pre>
+<h3>Ranh giới module</h3>
+<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+<thead>
+<tr>
+<th>Module</th>
+<th>Trách nhiệm</th>
+<th>Không được làm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI/Controller</td>
+<td>Wizard, setting, consent, trạng thái, hủy/kill switch</td>
+<td>Tự bật autonomy cao cho profile mới</td>
+</tr>
+<tr>
+<td>Perception</td>
+<td>Đọc nguồn, OCR, dựng sự kiện, speaker</td>
+<td>Gửi chat hoặc gọi model sinh nội dung</td>
+</tr>
+<tr>
+<td>Brain</td>
+<td>Rule, decision, turn-taking, generation, guard</td>
+<td>Giữ credential thao tác Windows hoặc gửi trực tiếp</td>
+</tr>
+<tr>
+<td>Actuator</td>
+<td>Kiểm quyền, permit, điền/gửi, xác minh</td>
+<td>Tin câu lệnh phát sinh từ chat/LLM</td>
+</tr>
+<tr>
+<td>Eval/Telemetry</td>
+<td>Đo timing, token, lỗi, gate report</td>
+<td>Log nguyên hội thoại mặc định</td>
+</tr>
+</tbody>
+</table></div>
+<p>MVP có thể dùng UI + worker đơn giản, nhưng <strong>một chủ sở hữu duy nhất của thao tác gửi</strong>. Khi mở L3/L4, actuator có ranh giới quyền, cancellation và lifecycle độc lập. Không xây service phân tán hay hệ plugin công khai trước khi có nhu cầu thật.</p>
+<h2 id="section-5">4. Adapter và profile chọn sau</h2>
+<h3>4.1 Chọn nguồn theo khả năng và quyền</h3>
+<p>Ưu tiên text có cấu trúc <strong>khi được phép và đủ thông tin</strong>: API chính thức, UI Automation, thông báo, DOM/log hợp lệ; OCR là phương án cuối. Không mặc định API/DOM biết đầy đủ danh tính hoặc thông báo chứa cả hội thoại.</p>
+<p>Mỗi adapter khai báo: quyền, version, source capabilities, native message/conversation ID, cách nhận self, độ đầy đủ, độ trễ, khả năng xác minh và action methods. Nếu không biết stable conversation ID thì không mở L3/L4 chỉ bằng cách khớp title.</p>
+<p>Notification listener có yêu cầu quyền/package identity cần spike trên Windows; capture có thể thất bại ở cửa sổ minimized, nội dung được bảo vệ hoặc backend không hỗ trợ. Phải phát trạng thái <code>source_unavailable</code>, không tái sử dụng dữ liệu cũ như dữ liệu hiện tại. <a href="https://learn.microsoft.com/en-us/windows/apps/develop/notifications/app-notifications/notification-listener">nguồn</a></p>
+<h3>4.2 Wizard cho app mới</h3>
+<ol>
+<li>Người dùng chọn cửa sổ từ danh sách đang mở; bind process/path/start token + HWND, title chỉ là tín hiệu phụ.</li>
+<li>Chọn nguồn đọc có khả năng chạy; cấp quyền rõ ràng.</li>
+<li>Nếu OCR: chọn ROI theo client area, xem preview, chỉ tên mình/kênh và thử đổi DPI/resize.</li>
+<li>Xác nhận persona, dữ liệu gửi đi, provider và ngân sách nếu có cloud.</li>
+<li>Bắt đầu L1/L2; chạy shadow mode, lưu gate report theo version.</li>
+<li>Chỉ đề nghị L3/L4 khi đủ bằng chứng và người dùng chủ động mở.</li>
+</ol>
+<p><code>profiles: []</code> trong config mẫu là có chủ ý. <code>profile.template.json</code> là mẫu <strong>tắt</strong>, không phải một app đã được hỗ trợ.</p>
+<h3>4.3 Chuẩn <code>MessageEvent</code></h3>
+<p>Các trường tối thiểu: <code>event_id</code>, <code>source_epoch</code>, <code>profile_id</code>, <code>conversation_id</code>, <code>conversation_revision</code>, <code>native_message_id?</code>, <code>occurrence_id</code>, <code>sender_id?</code>, <code>sender_display</code>, <code>speaker_state</code> (self/other/unknown), <code>speaker_evidence</code>, <code>text_nfc</code>, <code>observed_at_utc</code>, <code>observed_monotonic</code>, <code>capture_quality</code>, <code>source_complete</code>.</p>
+<ul>
+<li>Dùng native message ID nếu có. Không lấy hash text + bucket thời gian làm ID duy nhất: hai tin “ok” thật có thể giống nhau.</li>
+<li>Với OCR, tạo occurrence qua line track + scroll alignment + source epoch. Tắt/mở nguồn hoặc đổi kênh phải đổi epoch.</li>
+<li>Nội dung “[YOU]” hay tên mình <strong>trong phần text</strong> không phải bằng chứng người nói.</li>
+<li>Sent-ledger hỗ trợ đối chiếu; không tự gán self chỉ vì người khác copy đúng câu mình vừa gửi.</li>
+<li>Text lỗi/không hoàn chỉnh được đánh dấu; không âm thầm sửa tên, số tiền, OTP hoặc giờ hẹn.</li>
+</ul>
+<h2 id="section-6">5. OCR và dựng transcript</h2>
+<h3>Mục tiêu</h3>
+<p>Đọc được tiếng Việt có dấu trên nguồn được chọn, với chỉ số đo riêng cho profile. Không khóa engine bằng tên runtime.</p>
+<h3>Thiết kế</h3>
+<ul>
+<li>Ưu tiên Windows.Graphics.Capture theo cửa sổ; DXGI/DXcam là fallback đã được đánh giá. Không coi “crop ROI” là đảm bảo không thu được cửa sổ khác.</li>
+<li>ROI chuẩn hóa 0–1 theo client area, Per-Monitor DPI aware; <code>x+w≤1</code>, <code>y+h≤1</code>. Khi anchor/DPI/layout đổi: invalidation, không gửi theo tọa độ cũ.</li>
+<li>So sánh các pipeline: ảnh gốc, upscale, Otsu, HSV mask. Không áp Otsu cho mọi game hoặc tuyên bố loại 99% nhiễu.</li>
+<li>Detector và recognizer là hai bài toán khác nhau. VietOCR là ứng viên recognizer dòng; cần detection/line segmentation và benchmark cả pipeline.</li>
+<li>Windows OCR chỉ cho locale thực sự được hỗ trợ; <strong>không dùng làm engine tiếng Việt trong baseline này</strong>. Engine/model cần kiểm charset dấu tiếng Việt trước bake-off. <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-language-fod?view=windows-11">nguồn</a></li>
+<li>PP-OCRv6/model đã nêu trong bản thẩm định không được coi là đã đạt tiếng Việt. Chỉ dùng một artifact/version mới sau charset check và benchmark ảnh thật.</li>
+<li>Dùng temporal voting ≥ 2 frame ổn định, phân biệt wrap/cuộn/tin mới, xử lý che khuất. Nền đổi không đồng nghĩa có tin mới.</li>
+</ul>
+<p>Overlay của trợ lý dùng capture exclusion khi được hỗ trợ, nhưng đó không phải một hàng rào bảo mật tuyệt đối. Còn phải kiểm tra mask/region và phát hiện self-output; nếu không loại được overlay thì pause nguồn. <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity">nguồn</a></p>
+<p><strong>Đã có:</strong> benchmark ảnh tổng hợp ở hồ sơ thẩm định. <strong>Chưa có:</strong> benchmark ảnh thật của app người dùng, Windows target và source adapter. Không chuyển kết quả synthetic thành nhãn “supported”.</p>
+<h2 id="section-7">6. Hai tầng AI, rule và turn-taking</h2>
+<h3>6.1 Rule cứng</h3>
+<p>Trước mọi cloud call: quyền đọc/cloud, denylist, nguồn có chất lượng, PII/secret policy, ngân sách, chống trùng. Trước hành động: tất cả quyền trên cộng autonomy, recipient, target, revision, input, presence và guard.</p>
+<p>Nội dung chat là dữ liệu không tin cậy. Tầng sinh không có tool chuyển tiền, đọc password manager, chạy shell, sửa setting hay gửi tin.</p>
+<h3>6.2 Jev — phản xạ quyết định</h3>
+<p>Giữ TypeSafe AI Jev là ứng viên ưu tiên, không mô tả Jev như model sinh chữ. Một request fan-out có thể kiểm tra: addressed, needs_reply, turn_complete, intent, complexity, money, secret, commitment, injection, asks_if_bot, sensitivity và lựa chọn câu mẫu. Rule có thẩm quyền chặn cao hơn kết quả model. <a href="https://docs.typesafe.ai/patterns/fan-out">nguồn</a></p>
+<p>Instruction rõ, từng phán đoán riêng, state ngắn; phép tính/ngày giờ/budget do code xử lý. Phải hiệu chỉnh trên dữ liệu tiếng Việt của trường hợp dùng thật; score/confidence không tự động là xác suất đã calibration. <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">nguồn</a></p>
+<p><strong>Model ID:</strong> không hardcode <code>jev-reflex-v2</code>, không dùng alias “latest” cho nhánh hành động chưa đánh giá. Candidate trong hồ sơ cũ phải được smoke-test và đưa vào registry trước khi bật.</p>
+<h3>6.3 Gemini/LLM — sinh bản nháp</h3>
+<p>Giữ Gemini Flash là hướng ưu tiên ban đầu. Provider chính thức, provider tùy chọn tương thích và local model dùng chung interface, nhưng capability/parameter được kiểm riêng.</p>
+<ul>
+<li>Cấu hình mẫu để <code>model_id: null</code>, provider/route tắt. Khi setup: xác minh model tồn tại, quyền truy cập, giá, data policy, thinking, structured output, streaming và giới hạn token.</li>
+<li>Không thay model đã ngừng bằng một tên mới chưa kiểm chứng. ID như Gemini 3.8 được xem là <strong>candidate từ yêu cầu/bản thẩm định</strong>, không phải cam kết còn khả dụng.</li>
+<li>Không dùng chung <code>max_tokens</code> cho mọi provider. Adapter map <code>max_output_tokens</code> theo API thật và dành ngân sách reasoning nếu provider tính chung.</li>
+<li>Streaming chỉ hiển thị preview; <strong>không gửi token chưa hoàn tất</strong>. Draft cuối mới được guard và tạo permit.</li>
+<li>Persona gồm cách xưng hô/độ dài/ngôn ngữ. Học giọng từ lịch sử của chính mình là opt-in, chưa nằm trong đường găng MVP.</li>
+</ul>
+<p>Đầu ra tối thiểu: <code>draft_id</code>, <code>reply_text</code>, <code>route_id</code>, <code>model_registry_revision</code>, <code>context_revision</code>, <code>risk_flags</code>, <code>finish_status</code>, <code>guard_status</code>. LLM tự khai confidence chỉ là một tín hiệu, không mở khóa L4.</p>
+<h3>6.4 Turn-taking</h3>
+<p>Chờ thích ứng 0.7–4 giây theo tín hiệu thực tế; nếu typing/fragment chưa kết thúc thì không bắt buộc trả lời ở mốc max wait. Quá hạn mà chưa chắc: fallback theo setting, không tự coi turn đã xong.</p>
+<p>Có tin mới, đổi kênh, sửa tin nguồn hoặc người dùng can thiệp khi đang sinh/countdown: hủy draft cũ, tăng revision, gộp lại và quyết định lại. Có timeout/lỗi API: không dùng lại câu đã hết hiệu lực.</p>
+<h2 id="section-8">7. Setting và thang tự chủ</h2>
+<p>Đọc chi tiết ở <code>SETTINGS_SPEC.md</code>. Mức mong muốn là setting; mức thực thi là kết quả policy.</p>
+<!-- BEGIN:AUTONOMY -->
+<div class="table-wrap"><table><colgroup><col style="width:24%"><col style="width:42%"><col style="width:34%"></colgroup>
+<thead>
+<tr>
+<th>Mức</th>
+<th>Agent</th>
+<th>Người dùng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 — Tắt</td>
+<td>Không đọc, không gọi model, không thao tác app.</td>
+<td>Chủ động bật profile.</td>
+</tr>
+<tr>
+<td>L1 — Chỉ đọc</td>
+<td>Đọc/tóm tắt khi đã được cấp quyền; không tạo hành động gửi.</td>
+<td>Tự trả lời.</td>
+</tr>
+<tr>
+<td>L2 — Gợi ý</td>
+<td>Hiện bản nháp ở cửa sổ trợ lý; không điền vào app đích.</td>
+<td>Tự chọn, tự gõ/dán và gửi.</td>
+</tr>
+<tr>
+<td>L3 — Điền bản nháp</td>
+<td>Chỉ điền bản đã duyệt, sau kiểm tra an toàn.</td>
+<td>Tự nhấn gửi trong app đích.</td>
+</tr>
+<tr>
+<td>L4 — Tự gửi có đếm ngược</td>
+<td>Chỉ gửi bản hoàn chỉnh sau đếm ngược, trong phạm vi đã mở khóa.</td>
+<td>Có mặt, có thể hủy; chọn rõ contact/nhóm được phép.</td>
+</tr>
+</tbody>
+</table></div>
+<!-- END:AUTONOMY -->
+
+<h3>Mở khóa</h3>
+<ul>
+<li>L2: G1 nếu OCR; G2/G3 và nguồn đủ chất lượng. Trong giai đoạn thu thập có thể hiển thị cảnh báo chất lượng, nhưng không tuyên bố đã đạt.</li>
+<li>L3: nguồn/người nói được xác minh, G5/G6 phù hợp, ≥ 200 lượt L2 được review, chấp nhận không sửa ≥ 70%, action adapter được phép.</li>
+<li>L4: tất cả điều kiện L3 + decision calibration, disclosure, presence, recipient stable ID trong allowlist và ≥ 500 shadow trials/profile/contact, 0 would-have-misfired.</li>
+<li>Quyền <strong>gửi</strong> cấm/chưa rõ, protection present/unknown, danh tính/kênh không rõ: <strong>tối đa L2</strong>, không điền/gửi bằng phím, và chỉ khi nguồn đọc vẫn được phép.</li>
+<li>Quyền <strong>đọc</strong> cấm/chưa rõ hoặc nguồn không thuộc phạm vi được cấp: L0; consent của chủ máy không tự thay thế quyền nền tảng/người liên quan.</li>
+<li>App nhạy cảm không được cấp quyền: L0. Tắt disclosure không được giữ L4.</li>
+</ul>
+<p><strong>Độ tin cậy thấp:</strong> setting cho <code>suggest_only</code>, <code>skip</code>, <code>ask_confirmation</code>, <code>retry_stronger</code>. Retry có giới hạn, không tự mở khóa autosend. Hard block (PII/secret, app cấm, source/target không rõ, kill switch) không có setting bypass.</p>
+<p>Mặc định recommend-only; không tự chọn contact, giờ yên lặng, budget hay tên tài khoản của người dùng.</p>
+<h2 id="section-9">8. State machine và thao tác an toàn</h2>
+<pre><code class="language-text">OFF → OBSERVING → COLLECTING → DECIDING → GENERATING → GUARDED_DRAFT
+                                          ├─ L2: SUGGESTED
+                                          ├─ L3: AWAITING_APPROVAL → FILLING
+                                          └─ L4: COUNTDOWN → PERMIT → SENDING
+                                                     → VERIFYING → COOLDOWN
+Hủy / mất nguồn / revision đổi / kill → CANCELLED hoặc OFF
+Kết quả gửi không rõ → DELIVERY_UNKNOWN, không tự thử gửi lại
+</code></pre>
+<h3>Send pipeline</h3>
+<ol>
+<li><strong>Policy/qualification:</strong> tính effective level, kiểm quyền, rate/cost budget, recipient, kết quả guard.</li>
+<li><strong>Duyệt/countdown:</strong> hiển thị trong trợ lý, <strong>chưa sửa ô nhập app đích</strong>. Mọi input người dùng khác hành động duyệt/hủy hợp lệ thì hủy countdown.</li>
+<li><strong>Permit một lần:</strong> ràng buộc target process/start token/HWND, conversation ID/revision, source epoch, user-input revision, profile-policy revision, draft hash và cancel generation. TTL tối đa 10 giây.</li>
+<li><strong>Recheck sát thao tác:</strong> actuator kiểm lại trước điền và trước gửi; input không rỗng/không xác định thì abort. Không giành foreground tự động.</li>
+<li><strong>Thao tác:</strong> L3 chỉ điền bản đã duyệt, người dùng tự gửi; L4 mới gọi send. Adapter ưu tiên stable native target. Clipboard fallback chỉ khi đã kiểm toàn bộ format/ownership và phục hồi an toàn.</li>
+<li><strong>Xác minh:</strong> ghi attempt <code>pending</code> <strong>trước</strong> thao tác; xác minh theo native ID hoặc self-message có bằng chứng. Timeout/crash → <code>unknown</code>, khóa retry của attempt đó.</li>
+<li><strong>Ledger:</strong> sau xác minh mới ghi <code>confirmed</code>/sent-ledger và cooldown. Không có cam kết exactly-once nếu nền tảng không cung cấp idempotency.</li>
+</ol>
+<p><strong>Clipboard:</strong> không xóa clipboard của người dùng. Đặt cờ loại khỏi history/cloud nếu hệ điều hành hỗ trợ; phục hồi chỉ khi sequence/ownership vẫn thuộc lần dán của app. Nếu người dùng đã copy thứ mới thì không ghi đè. Không khôi phục được format an toàn thì không dùng fallback. <a href="https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats">nguồn</a></p>
+<p><strong>Kill switch:</strong> dùng hotkey có modifier qua <code>RegisterHotKey</code>; nút UI dự phòng nếu đăng ký thất bại. Invalidate token trước, sau đó stop worker/cancel local request. Không thể thu hồi packet đã gửi hoặc tin đã đến server; không hứa “dừng mọi thứ trong 10 ms”. <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerhotkey">nguồn</a></p>
+<p><strong>Giới hạn còn lại:</strong> Windows không bảo đảm giao dịch atomic giữa kiểm foreground và input injection. Recheck, một actuator và stress test giảm rủi ro, không chứng minh zero-misfire. Nếu không đạt gate thì giữ L2.</p>
+<h2 id="section-10">9. Bảo mật, dữ liệu và quyền riêng tư</h2>
+<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:30%"><col style="width:50%"></colgroup>
+<thead>
+<tr>
+<th>Đối tượng</th>
+<th>Mặc định</th>
+<th>Khi bật thêm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screenshot</td>
+<td>Không lưu; chỉ ROI đang được cấp quyền</td>
+<td>Diagnostic opt-in riêng, ngắn hạn, mã hóa, xóa tự động; không cloud</td>
+</tr>
+<tr>
+<td>Transcript</td>
+<td>RAM theo phiên</td>
+<td>SQLCipher + khóa DPAPI sau kiểm thử; retention cấu hình, không fallback plaintext</td>
+</tr>
+<tr>
+<td>API key</td>
+<td>Không có trong JSON/log/zip</td>
+<td>Windows Credential Manager; JSON chỉ chứa <code>credential_ref</code></td>
+</tr>
+<tr>
+<td>Cloud text</td>
+<td>Tắt</td>
+<td>Consent theo provider, text tối thiểu đã lọc; công bố chính sách provider</td>
+</tr>
+<tr>
+<td>Model/local service</td>
+<td>Không tự tải/chạy</td>
+<td>Kiểm nguồn, hash, license, cổng loopback và tài nguyên</td>
+</tr>
+<tr>
+<td>Telemetry</td>
+<td>Cục bộ, không nội dung chat</td>
+<td>Không analytics từ xa mặc định</td>
+</tr>
+<tr>
+<td>Memory/persona học từ lịch sử</td>
+<td>Tắt</td>
+<td>Chỉ dữ liệu được quyền dùng, người dùng xem/xóa được</td>
+</tr>
+</tbody>
+</table></div>
+<p>Regex che CCCD/điện thoại/OTP chỉ là defense-in-depth, không bảo đảm tìm mọi PII. Có nghi ngờ thì không gửi cloud; che không thành công hoặc bộ lọc lỗi phải fail-closed. Paid tier không tự chứng minh “không training”; phải review điều khoản thực tế.</p>
+<p>Không giữ log request/response SDK ở debug. Dữ liệu eval phải có consent riêng, pseudonymize và hạn lưu; không đánh đồng recorder kiểm thử với screenshot logging vận hành.</p>
+<p>Chuỗi cung ứng: ưu tiên SDK chính thức; dependency tối thiểu, pin/hash, SBOM/license, review bản cập nhật. Không lấy repo giống tên làm repo chính chủ; không tải artifact từ nguồn đã bị đánh dấu rủi ro trong audit. Không cần LiteLLM ở MVP nếu direct SDK đáp ứng.</p>
+<p>Model/adapter/profile/quyền thay đổi phải invalidate bằng chứng liên quan và yêu cầu đánh giá lại. Không có field JSON cho LLM tự chỉnh policy.</p>
+<h2 id="section-11">10. Nghiệm thu theo gate</h2>
+<!-- BEGIN:GATES -->
+<div class="table-wrap"><table><colgroup><col style="width:16%"><col style="width:36%"><col style="width:34%"><col style="width:14%"></colgroup>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Tiêu chí đề xuất</th>
+<th>Bằng chứng cần có</th>
+<th>Trạng thái</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1 — OCR</td>
+<td>CER NFC ≤ 10% cho L2; ≤ 3% (app) / ≤ 6% (game được phép) trước L3+; kiểm riêng tên/người nhận và ký tự quan trọng.</td>
+<td>≥ 500 dòng ảnh thật/profile, ≥ 3 cỡ chữ; tách tập hiệu chỉnh và tập kiểm thử.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G2 — Transcript</td>
+<td>Phát hiện tin mới: precision ≥ 99.5%, recall ≥ 98%; phát trùng ≤ 0.1%.</td>
+<td>≥ 2 giờ replay/profile; cuộn, wrap, đổi kênh, popup, lặp lại cùng một câu.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G3 — Người nói</td>
+<td>Precision đối phương trên tin kích hoạt trả lời ≥ 99.9%; self-loop quan sát = 0.</td>
+<td>≥ 1,000 tình huống có nhãn, gồm giả mạo tên và copy đúng nội dung tin của mình.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G4 — Decision</td>
+<td>F1 needs_reply/addressed ≥ 0.85; ECE ≤ 0.05 sau hiệu chỉnh; P95 decision mục tiêu ≤ 700 ms.</td>
+<td>≥ 1,000 tình huống tiếng Việt có nhãn; có dấu/không dấu/teencode; đo từ mạng dùng thật.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G5 — Generation</td>
+<td>Chấp nhận không sửa ≥ 70% trên ≥ 200 lượt L2 trước L3; 0 vi phạm quan sát trên ≥ 200 red-team.</td>
+<td>Đánh giá thủ công; riêng cam kết, tiền, OTP, PII, sức khỏe/pháp lý và hỏi có phải AI.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G6 — Action</td>
+<td>Misfire quan sát = 0/10,000 test; hủy P99 mục tiêu ≤ 50 ms; xác minh sau gửi ≥ 99%; 0 retry mù.</td>
+<td>Windows harness: Alt+Tab, đổi kênh, HWND/PID tái sử dụng, input chen ngang, timeout, crash.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G7 — Tài nguyên</td>
+<td>Mục tiêu ban đầu: CPU idle ≤ 3%; RAM core/UI ≤ 500 MB, báo riêng model worker; FPS giảm ≤ 2%.</td>
+<td>Máy cá nhân tham chiếu và app/game thực tế được chọn sau; ghi cấu hình, baseline, n và khoảng dao động.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G8 — Bảo mật</td>
+<td>0 key plaintext, 0 nội dung chat trong log vận hành; PII recall mục tiêu ≥ 95%, báo cả precision; dependency có nguồn/hash/license.</td>
+<td>Bộ PII Việt Nam + quét build/log; thử lỗi mã hóa, lỗi credential store và cập nhật giả mạo.</td>
+<td>Chưa đo</td>
+</tr>
+<tr>
+<td>G9 — Quyền và tuân thủ</td>
+<td>Cấp quyền theo profile; ma trận ToS có ngày review; công bố AI ở L4; không đọc/gửi vượt quyền.</td>
+<td>Review từng tích hợp. Trước công khai: thêm review pháp lý, quyền dữ liệu, license và công bố quyền.</td>
+<td>Chưa review</td>
+</tr>
+</tbody>
+</table></div>
+<!-- END:GATES -->
+
+<p>Các ngưỡng là đề xuất để hiệu chỉnh bằng máy và nguồn thực tế. “0 lỗi quan sát” <strong>không</strong> bằng xác suất lỗi bằng 0; báo mẫu, phạm vi, version, failure cases và kết quả ngoài mẫu. Không lấy điểm trung bình tốt để bù một hard gate an toàn không đạt.</p>
+<p>Hiện tại chỉ có kiểm thử offline của <strong>cấu hình/policy tham chiếu</strong> trong gói này. Không đánh dấu G1–G9 đạt bằng các bài unittest đó.</p>
+<h2 id="section-12">11. Độ trễ và chi phí</h2>
+<!-- BEGIN:LATENCY -->
+<div class="table-wrap"><table><colgroup><col style="width:25%"><col style="width:45%"><col style="width:30%"></colgroup>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Định nghĩa</th>
+<th>Target chưa đo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T_detect — nguồn cấu trúc</td>
+<td>Tin trở nên đọc được → MessageEvent ổn định.</td>
+<td>P95 ≤ 300 ms</td>
+</tr>
+<tr>
+<td>T_detect — OCR</td>
+<td>Tin hiện trong ROI → MessageEvent ổn định.</td>
+<td>P95 ≤ 1.2 s</td>
+</tr>
+<tr>
+<td>T_suggest</td>
+<td>Turn được chốt → bản nháp đầy đủ, đã qua guard.</td>
+<td>P95 ≤ 2.5 s</td>
+</tr>
+<tr>
+<td>T_send</td>
+<td>Duyệt/hết countdown → xác minh thấy tin gửi.</td>
+<td>P95 ≤ 1 s; đo riêng từng adapter</td>
+</tr>
+<tr>
+<td>T_cancel</td>
+<td>Nhận lệnh hủy → invalidation token và chặn hành động còn chờ.</td>
+<td>P99 ≤ 50 ms</td>
+</tr>
+</tbody>
+</table></div>
+<!-- END:LATENCY -->
+
+<p><strong>Tất cả target trên chưa đo.</strong> Turn wait và countdown là thời gian chủ động, phải báo riêng. Đo P50/P95/P99, n, warm/cold start, mạng Việt Nam và cấu hình máy. Không cộng các P95 thành một P95 end-to-end.</p>
+<p>Chi phí được tính từ usage thật:</p>
+<pre><code class="language-text">cost = Σ (input_tokens × input_price
+        + output_and_reasoning_tokens × output_price
+        + cache/tool/extra_charges) / đơn vị niêm yết
+</code></pre>
+<p>Bao gồm decision fan-out, retry, stronger-route, output guard và cache; không chỉ lần generation cuối. Giá có effective date/currency/tier. Ước tính cũ không dùng làm budget mặc định. Cloud chưa bật cho tới khi người dùng đặt trần ngày/tháng; hết trần thì dừng cloud call, không lén đổi provider. Đặt quota phía provider nếu có vì local estimator không kiểm soát được hóa đơn tuyệt đối.</p>
+<h2 id="section-13">12. Tech stack và lộ trình cá nhân</h2>
+<h3>Stack dự kiến, chưa khóa bằng benchmark</h3>
+<p>Python 3.12/3.13 tùy wheel Windows; PySide6 cho UI; WinRT/WGC/UIA wrapper được spike; OpenCV cho pipeline ảnh; detector + recognizer thắng bake-off; official SDK cho Jev/Gemini; SQLite metadata, SQLCipher khi lưu nội dung. C#/.NET chỉ xem xét cho Windows bridge nếu bằng chứng cho thấy cần; không rewrite toàn bộ trước khi có bản dùng được.</p>
+<h3>Lộ trình ước lượng</h3>
+<div class="table-wrap"><table><colgroup><col style="width:20%"><col style="width:15%"><col style="width:35%"><col style="width:30%"></colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Khoảng tuần*</th>
+<th>Đầu ra</th>
+<th>Xong khi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0 — Nền tảng kiểm chứng</td>
+<td>1–2</td>
+<td>Mock chat, replay, protocol, config/schema, cancel/policy tests, provider smoke test tùy consent</td>
+<td>Có baseline tái lập; unknown rõ ràng; không cần chốt tên app</td>
+</tr>
+<tr>
+<td>P1 — Prototype cá nhân L1/L2</td>
+<td>3–6</td>
+<td>UI/wizard, một nguồn khả thi, decision/generation, guard, telemetry, shadow</td>
+<td>Chọn app đang dùng tại thời điểm đó; tích hợp thực tế đọc/gợi ý được</td>
+</tr>
+<tr>
+<td>P2 — Chất lượng nguồn</td>
+<td>7–9</td>
+<td>Transcript/speaker; OCR nếu app chọn cần; DPI/scroll/overlay/replay</td>
+<td>Gate nguồn của profile đạt; có support record đúng phạm vi</td>
+</tr>
+<tr>
+<td>P3 — Hành động nếu cần</td>
+<td>10–12</td>
+<td>L3; L4 chỉ nếu đủ điều kiện; permit, ledger, cancel/verify, red-team</td>
+<td>G5/G6 và điều kiện autonomy; không bắt buộc L4 cho app cấm</td>
+</tr>
+<tr>
+<td>P4 — Dùng ổn cá nhân</td>
+<td>13–16</td>
+<td>Sửa lỗi, recovery, data controls, build cá nhân, nhật ký dùng thực</td>
+<td>≥ 14 ngày hoạt động, gate áp dụng đạt, không sự cố nghiêm trọng mở</td>
+</tr>
+<tr>
+<td>P5 — Cân nhắc công khai</td>
+<td>Sau đó</td>
+<td>Quyết định phát hành và checklist riêng</td>
+<td>Chủ dự án đồng ý; legal/security/license/installer/support readiness đạt</td>
+</tr>
+</tbody>
+</table></div>
+<p>*Ước lượng lập kế hoạch, không cam kết tiến độ. P0/P1 có thể dùng structured source trước, OCR sau; nếu app chọn chỉ có OCR thì đổi thứ tự, không cố giữ lịch để bỏ qua kiểm thử. Nghiệm thu quan trọng hơn số tuần.</p>
+<h2 id="section-14">13. Công khai là một mốc riêng</h2>
+<p>Chỉ bắt đầu khi mốc cá nhân đạt và người dùng muốn phát hành. Bổ sung: ma trận hỗ trợ có version/giới hạn; rà soát quyền dữ liệu và quy định ở thị trường thực tế; license dependency/model; installer/updater có kiểm chữ ký; quyền screen/network/input rõ; vulnerability reporting, rollback và hỗ trợ sự cố.</p>
+<p>Không dùng “cá nhân” làm miễn trừ ToS hay quyền riêng tư. Không tự suy ra kết luận pháp lý áp dụng toàn cầu từ một bài viết; review văn bản đang có hiệu lực trước phát hành. Nền tảng cấm self-bot phải được xem là cấm nhánh tự động hóa tài khoản cá nhân, không đổi tên thành “copilot” để vượt giới hạn. <a href="https://support.discord.com/hc/en-us/articles/115002192352-Automated-User-Accounts-Self-Bots">nguồn</a></p>
+<h2 id="section-15">14. Bộ bàn giao và việc còn phải chứng minh</h2>
+<p><strong>Đã sửa trong đặc tả:</strong> định vị, kiến trúc, OCR, vai trò Jev/LLM, autonomy/setting, input safety, privacy, metrics/cost, roadmap, audit và config/schema. 50 mục errata được đối chiếu ở <code>reference/traceability.json</code>.</p>
+<p><strong>Có thể kiểm thử offline:</strong> config/schema, ràng buộc chéo, policy cap, permit, duplicate attempt và state invalidation trong code tham chiếu.</p>
+<p><strong>Chưa triển khai/đo:</strong> app Windows, OCR ảnh thật, Jev/Gemini API, WinRT/UIA, clipboard, actuator thực tế, runtime hotkey, code signing và compliance cho phát hành.</p>
+<p>Một cấu hình hợp lệ không chứng minh app tích hợp hợp lệ. Không mở hành động thật từ kết quả unittest thuần Python.</p>
+<h2 id="section-16">15. Nguồn và cách cập nhật</h2>
+<p>Nguồn nền tảng: Microsoft Learn; TypeSafe docs; tài liệu model/API chính thức của provider; ToS từng app. <code>reference/THAM_DINH_Auto-Chat-Agent_v2.4.md</code> là hồ sơ audit lịch sử, <strong>không phải baseline triển khai mới</strong>; link/giá/model trong đó phải recheck khi build.</p>
+<p><code>project.json</code> là nguồn chung cho ngưỡng/level; config/schema và các bảng được sinh bởi <code>scripts/build_documents.py</code>. HTML/PDF sinh từ Markdown đã đồng bộ. Mọi sửa đổi kỹ thuật quan trọng có ADR và invalidate gate report liên quan.</p></article>
+<footer>Nguồn chuẩn: Master Plan V3 + project.json. Bảng gate là mục tiêu, không phải kết quả đã đạt.</footer>
+</main></body></html>
