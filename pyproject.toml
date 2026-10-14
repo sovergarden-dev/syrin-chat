@@ -19,7 +19,10 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Topic :: Communications",
 ]
-dependencies = []
+dependencies = [
+  "jsonschema==4.25.1",
+  "tzdata==2025.2",
+]
 
 [project.optional-dependencies]
 reference = [
@@ -36,3 +39,6 @@ autochat-replay = "autochat.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+autochat = ["data/*.json"]

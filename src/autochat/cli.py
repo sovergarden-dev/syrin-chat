@@ -6,7 +6,8 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Sequence
 
-from .domain import AutonomyLevel, Decision, DraftCandidate, RuntimePolicy
+from .domain import AutonomyLevel, Decision, DraftCandidate, MessageEvent, RuntimePolicy
+from .guard import ConversationRateLimiter
 from .protocol import ReplayInputError, load_events, run_replay
 from .replay import ReplayCoordinator
 
@@ -61,6 +62,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         ),
         decision_gate=_NoModelDecisionGate(),
         generator=_UnreachableGenerator(),
+        rate_limiter=ConversationRateLimiter(),
     )
     report = run_replay(events, coordinator)
     _emit(asdict(report))
