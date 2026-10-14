@@ -7,6 +7,8 @@ from threading import RLock
 from typing import Protocol
 
 from .domain import AutonomyLevel, Decision, DraftCandidate, MessageEvent, RuntimePolicy, SpeakerState
+from .guard import ConversationRateLimiter, check_inbound_hard_rules, check_outbound_draft
+from .shadow import ShadowCollector, ShadowEvent
 
 
 class SuggestionState(str, Enum):
@@ -68,6 +70,8 @@ class ReplayCoordinator:
         generator: DraftGenerator,
         reply_max_chars: int = 160,
         context_limit: int = 10,
+        rate_limiter: ConversationRateLimiter | None = None,
+        shadow_collector: ShadowCollector | None = None,
     ) -> None:
         if not isinstance(profile_id, str) or not profile_id.strip():
             raise ValueError("profile_id: nonempty_string_required")
@@ -87,6 +91,8 @@ class ReplayCoordinator:
         self._generator = generator
         self._reply_max_chars = reply_max_chars
         self._context_limit = context_limit
+        self._rate_limiter = rate_limiter
+        self._shadow_collector = shadow_collector
         self._events: list[MessageEvent] = []
         self._event_ids: set[str] = set()
         self._revision = 0
@@ -112,7 +118,18 @@ class ReplayCoordinator:
             if not event.source_complete:
                 return self._result(SuggestionState.WAITING, "source_incomplete")
             if event.speaker_state is not SpeakerState.OTHER:
+                if self._rate_limiter is not None and event.speaker_state is SpeakerState.SELF:
+                    pass
                 return self._result(SuggestionState.WAITING, "speaker_not_other")
+            if self._rate_limiter is not None:
+                self._rate_limiter.mark_other_message(event.conversation_id, event.observed_monotonic)
+            inbound_violations = check_inbound_hard_rules(event.text_nfc)
+            if inbound_violations:
+                return self._result(SuggestionState.BLOCKED, "inbound_guard:" + ",".join(inbound_violations))
+            if self._rate_limiter is not None:
+                allowed, rate_reason = self._rate_limiter.try_acquire(event.conversation_id, event.observed_monotonic)
+                if not allowed:
+                    return self._result(SuggestionState.BLOCKED, f"rate_limit:{rate_reason}")
             context = self._context_for(event)
             cancellation_generation = self._cancel_generation
 
@@ -218,12 +235,9 @@ class ReplayCoordinator:
         text = candidate.reply_text
         if candidate.finish_status != "complete":
             return "generation_incomplete"
-        if not text.strip():
-            return "draft_empty"
-        if len(text) > self._reply_max_chars:
-            return "draft_too_long"
-        if "\x00" in text:
-            return "draft_contains_nul"
+        violations = check_outbound_draft(text, max_chars=self._reply_max_chars)
+        if violations:
+            return "outbound_guard:" + ",".join(violations)
         return None
 
     def _draft_id(self, context: TranscriptContext, candidate: DraftCandidate) -> str:

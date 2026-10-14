@@ -8,6 +8,11 @@
 - Event-ID deduplication without collapsing two real same-text occurrences.
 - Speaker/source completeness guards before decision or generation.
 - Cancellation and newer-context invalidation outside the adapter execution lock.
+- Inbound and outbound guards: Vietnamese CCCD/phone/card/OTP/email redaction and hard rules.
+- Thread-safe conversation rate limiter matching V3 hard limits.
+- Action-phase policy enforcement: `effective_level`, single-use `SendPermit`, and `AttemptLedger`.
+- Runtime configuration loader with model registry verification and schema enforcement.
+- Metadata-only shadow telemetry collector (`ShadowCollector`) for measuring G4/G5/G6 criteria.
 - Content-free failure and risk reasons.
 - Strict JSONL replay parser and metadata-only CLI audit.
 - Isolated package build, lockfile, Windows CI workflow, and preserved V3 reference suite.

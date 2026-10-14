@@ -35,7 +35,7 @@ Implementation records:
 
 | Phase | Scope | State |
 | --- | --- | --- |
-| P0 | Replay fixtures, domain protocol, transcript safeguards, deterministic L2 suggestions, cancellation and policy tests | In progress |
+| P0 | Replay fixtures, domain protocol, transcript safeguards, deterministic L2 suggestions, cancellation and policy tests, guard, config/registry gates, shadow metrics | Complete |
 | P1 | One user-selected, permission-reviewed real source with L1/L2 integration | Blocked until an app is selected and evidence is collected |
 | P2 | OCR/transcript quality for the selected profile | Not started |
 | P3 | L3/L4 only after all applicable evidence gates | Not started |

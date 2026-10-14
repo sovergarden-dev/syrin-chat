@@ -1,16 +1,67 @@
 from .domain import AutonomyLevel, Decision, DraftCandidate, MessageEvent, RuntimePolicy, SpeakerState
-from .replay import Draft, ReplayCoordinator, Suggestion, SuggestionState, TranscriptContext
+from .guard import (
+    ConversationRateLimiter,
+    PIIRedactionError,
+    check_inbound_hard_rules,
+    check_outbound_draft,
+    redact_pii,
+)
+from .config import ConfigError, ModelRecord, ModelRegistry, ProfileConfig, RuntimeConfig, load_config, load_registry
+from .policy import (
+    AttemptLedger,
+    DeliveryState,
+    Eligibility,
+    ProfilePolicy,
+    Qualification,
+    SendPermit,
+    Snapshot,
+    draft_digest,
+    effective_level,
+    low_confidence_action,
+)
+from .protocol import ReplayInputError, ReplayReport, load_events, run_replay
+from .replay import ReplayCoordinator, Suggestion, SuggestionState, TranscriptContext
+from .shadow import ShadowCollector, ShadowEvent, ShadowMetricsSummary
 
 __all__ = [
+    "AttemptLedger",
     "AutonomyLevel",
+    "ConfigError",
+    "ConversationRateLimiter",
     "Decision",
+    "DeliveryState",
     "Draft",
     "DraftCandidate",
+    "Eligibility",
     "MessageEvent",
+    "ModelRecord",
+    "ModelRegistry",
+    "PIIRedactionError",
+    "ProfileConfig",
+    "ProfilePolicy",
+    "Qualification",
     "ReplayCoordinator",
+    "ReplayInputError",
+    "ReplayReport",
+    "RuntimeConfig",
     "RuntimePolicy",
+    "SendPermit",
+    "ShadowCollector",
+    "ShadowEvent",
+    "ShadowMetricsSummary",
+    "Snapshot",
     "SpeakerState",
     "Suggestion",
     "SuggestionState",
     "TranscriptContext",
+    "check_inbound_hard_rules",
+    "check_outbound_draft",
+    "draft_digest",
+    "effective_level",
+    "load_config",
+    "load_events",
+    "load_registry",
+    "low_confidence_action",
+    "redact_pii",
+    "run_replay",
 ]
