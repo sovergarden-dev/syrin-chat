@@ -17,6 +17,13 @@
 - Strict JSONL replay parser and metadata-only CLI audit.
 - Isolated package build, lockfile, Windows CI workflow, and preserved V3 reference suite.
 
+## Implemented P1 Universal Overlay components
+
+- `autochat.ui.geometry`: High-performance coordinate space mapping, `Rect` math with clamping, normalized sub-window offsets, and multi-monitor DPI scaling.
+- `autochat.ui.win32`: Native bridge implementing `WS_EX_NOACTIVATE` (zero-focus stealing), `WDA_EXCLUDEFROMCAPTURE` (screen-capture invisible overlay to eliminate self-capture loops), and window rectangle queries.
+- `autochat.ui.actuator`: `StagedInputActuator` supporting staged message buffers, in-flight manual editing, countdown autopilot (3s countdown with cancel), and automated focus-then-dispatch triggers.
+- `autochat.ui.overlay`: Headless-friendly `OverlayState` with slot presets (`save_preset`, `apply_preset`), coordinate lock/unlock, and lazy PySide6 `FloatingAssistantOverlay` interface.
+
 ## Explicitly not implemented
 
 - Windows capture, UI Automation, notifications, OCR, overlay UI, region selector, hotkey, clipboard, input mutation, fill, send, ledger persistence, or delivery verification.
