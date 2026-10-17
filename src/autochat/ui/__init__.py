@@ -20,13 +20,17 @@ from .win32 import (
     Win32Bridge,
 )
 
+from .hotkey import GlobalHotkeyBridge, HotkeyAction, NativeUser32HotkeyApi
 from .win32_input import InputMode, NativeWin32InputApi, Win32InputDispatcher
 
 __all__ = [
     "DpiScale",
     "FloatingAssistantOverlay",
+    "GlobalHotkeyBridge",
+    "HotkeyAction",
     "InputInjector",
     "InputMode",
+    "NativeUser32HotkeyApi",
     "NativeWin32InputApi",
     "NormalizedRect",
     "OverlayConfig",
