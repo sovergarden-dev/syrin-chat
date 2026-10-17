@@ -1,8 +1,15 @@
 from __future__ import annotations
 
 import ctypes
+from enum import Enum
+import random
 import time
 from typing import Any, Optional
+
+
+class InputMode(str, Enum):
+    CLIPBOARD = "clipboard"
+    HUMAN_KEYPRESS = "human_keypress"
 
 
 class NativeWin32InputApi:
@@ -121,6 +128,22 @@ class NativeWin32InputApi:
         except Exception:
             return False
 
+    def SendUnicodeChar(self, char: str) -> bool:
+        if not self.is_available:
+            return False
+        KEYEVENTF_UNICODE = 0x0004
+        KEYEVENTF_KEYUP = 0x0002
+        try:
+            code = ord(char)
+            # Guard against surrogate pairs / non-BMP characters for 16-bit wScan
+            if code > 0xFFFF:
+                return False
+            self._user32.keybd_event(0, code, KEYEVENTF_UNICODE, 0)
+            self._user32.keybd_event(0, code, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP, 0)
+            return True
+        except Exception:
+            return False
+
 
 class Win32InputDispatcher:
     """Handles focus restoration and safe text injection into target applications."""
@@ -147,9 +170,25 @@ class Win32InputDispatcher:
         ok = self._api.SetForegroundWindow(hwnd)
         return bool(ok)
 
-    def inject_and_send(self, text: str) -> bool:
+    def inject_and_send(
+        self,
+        text: str,
+        mode: InputMode = InputMode.CLIPBOARD,
+        min_delay: float = 0.02,
+        max_delay: float = 0.05,
+    ) -> bool:
         if not isinstance(text, str) or not text.strip():
             return False
+
+        if mode == InputMode.HUMAN_KEYPRESS:
+            d_min = max(0.0, min(min_delay, max_delay))
+            d_max = max(0.0, max(min_delay, max_delay))
+            for char in text:
+                if not self._api.SendUnicodeChar(char):
+                    return False
+                if d_max > 0:
+                    time.sleep(random.uniform(d_min, d_max))
+            return bool(self._api.SendKeyCombo("enter"))
 
         orig_clipboard = ""
         if self.restore_clipboard:

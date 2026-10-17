@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-from autochat.ui.win32_input import Win32InputDispatcher
+from autochat.ui.win32_input import InputMode, Win32InputDispatcher
 
 
 class MockWin32Api:
@@ -9,6 +9,7 @@ class MockWin32Api:
         self.foreground_hwnd = 100
         self.clipboard_data = "original clipboard text"
         self.sent_inputs = []
+        self.sent_chars = []
 
     def GetForegroundWindow(self) -> int:
         return self.foreground_hwnd
@@ -35,6 +36,10 @@ class MockWin32Api:
 
     def SendKeyCombo(self, combo: str) -> bool:
         self.sent_inputs.append(combo)
+        return True
+
+    def SendUnicodeChar(self, char: str) -> bool:
+        self.sent_chars.append(char)
         return True
 
 
@@ -70,6 +75,21 @@ class Win32InputDispatcherTests(unittest.TestCase):
 
         # Clipboard restored back to user's original data
         self.assertEqual(mock_api.clipboard_data, "user secret copied")
+
+    def test_inject_and_send_human_keypress(self) -> None:
+        mock_api = MockWin32Api()
+        dispatcher = Win32InputDispatcher(api=mock_api)
+        success = dispatcher.inject_and_send(
+            "Hello",
+            mode=InputMode.HUMAN_KEYPRESS,
+            min_delay=0.001,
+            max_delay=0.002,
+        )
+        self.assertTrue(success)
+        self.assertEqual(mock_api.sent_chars, list("Hello"))
+        self.assertIn("enter", mock_api.sent_inputs)
+        # Clipboard was not touched
+        self.assertEqual(mock_api.clipboard_data, "original clipboard text")
 
     def test_inject_and_send_empty_fails_gracefully(self) -> None:
         mock_api = MockWin32Api()
