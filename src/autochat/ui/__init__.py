@@ -20,10 +20,13 @@ from .win32 import (
     Win32Bridge,
 )
 
+from .win32_input import NativeWin32InputApi, Win32InputDispatcher
+
 __all__ = [
     "DpiScale",
     "FloatingAssistantOverlay",
     "InputInjector",
+    "NativeWin32InputApi",
     "NormalizedRect",
     "OverlayConfig",
     "OverlayState",
@@ -38,6 +41,7 @@ __all__ = [
     "WS_EX_TOPMOST",
     "WS_EX_TRANSPARENT",
     "Win32Bridge",
+    "Win32InputDispatcher",
     "WindowAnchor",
     "is_qt_available",
     "setup_overlay_window",
