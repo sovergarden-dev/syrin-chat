@@ -17,12 +17,16 @@
 - Strict JSONL replay parser and metadata-only CLI audit.
 - Isolated package build, lockfile, Windows CI workflow, and preserved V3 reference suite.
 
-## Implemented P1 Universal Overlay components
+## Implemented P1 Universal Overlay & Perception components
 
 - `autochat.ui.geometry`: High-performance coordinate space mapping, `Rect` math with clamping, normalized sub-window offsets, and multi-monitor DPI scaling.
 - `autochat.ui.win32`: Native bridge implementing `WS_EX_NOACTIVATE` (zero-focus stealing), `WDA_EXCLUDEFROMCAPTURE` (screen-capture invisible overlay to eliminate self-capture loops), and window rectangle queries.
 - `autochat.ui.actuator`: `StagedInputActuator` supporting staged message buffers, in-flight manual editing, countdown autopilot (3s countdown with cancel), and automated focus-then-dispatch triggers.
 - `autochat.ui.overlay`: Headless-friendly `OverlayState` with slot presets (`save_preset`, `apply_preset`), coordinate lock/unlock, and lazy PySide6 `FloatingAssistantOverlay` interface.
+- `autochat.ui.win32_input`: `Win32InputDispatcher` implementing `InputInjector` protocol with safe clipboard state preservation, foreground window focus restoration, and simulated keyboard dispatch (`Ctrl+V` + `Enter`).
+- `autochat.perception.frame`: High-speed zero-dependency `Frame` representation with fast sub-region cropping (`crop(rect: Rect)`).
+- `autochat.perception.detector`: `DirtyFrameDetector` comparing consecutive frames on byte level with adaptive delta and change thresholds, avoiding unnecessary OCR calls on static frames or moving backgrounds.
+- `autochat.perception.capture`: `ScreenRegionCapture` protocol with `MockCaptureBackend` and zero-dependency `GdiCaptureBackend` utilizing Windows `BitBlt` and `GetDIBits`.
 
 ## Explicitly not implemented
 
