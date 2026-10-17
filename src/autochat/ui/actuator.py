@@ -54,7 +54,7 @@ class StagedInputActuator:
         with self._lock:
             return self._target_hwnd
 
-    def stage(self, text: str, target_hwnd: int, countdown_seconds: float = 0.0) -> None:
+    def stage(self, text: str, target_hwnd: int = 1, countdown_seconds: float = 0.0) -> bool:
         if not isinstance(text, str):
             raise ValueError("text must be string")
         if not isinstance(target_hwnd, int) or target_hwnd <= 0:
@@ -76,6 +76,7 @@ class StagedInputActuator:
             else:
                 self._countdown_remaining = 0.0
                 self._status = StagedInputStatus.STAGED
+            return True
 
     def edit_text(self, new_text: str) -> None:
         if not isinstance(new_text, str):

@@ -1,0 +1,79 @@
+from __future__ import annotations
+
+import ctypes
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
+
+
+class HotkeyAction(str, Enum):
+    SEND_IMMEDIATE = "send_immediate"
+    CANCEL_DRAFT = "cancel_draft"
+    PANIC_STOP = "panic_stop"
+
+
+class NativeUser32HotkeyApi:
+    def __init__(self) -> None:
+        try:
+            self._user32 = ctypes.windll.user32
+        except (AttributeError, OSError):
+            self._user32 = None
+
+    @property
+    def is_available(self) -> bool:
+        return self._user32 is not None
+
+    def RegisterHotKey(self, hwnd: int, hotkey_id: int, fsModifiers: int, vk: int) -> int:
+        if not self._user32:
+            return 0
+        return int(self._user32.RegisterHotKey(hwnd, hotkey_id, fsModifiers, vk))
+
+    def UnregisterHotKey(self, hwnd: int, hotkey_id: int) -> int:
+        if not self._user32:
+            return 0
+        return int(self._user32.UnregisterHotKey(hwnd, hotkey_id))
+
+
+class GlobalHotkeyBridge:
+    """Manages system-wide Win32 hotkeys for single-touch sending, cancel, and emergency panic stop."""
+
+    def __init__(self, api: Any = None, hwnd: int = 0) -> None:
+        if api is not None:
+            self._api = api
+        else:
+            self._api = NativeUser32HotkeyApi()
+        self.hwnd = hwnd
+        self._next_id = 1
+        self._callbacks: Dict[int, Callable[[], None]] = {}
+        self._registered_ids: Dict[HotkeyAction, int] = {}
+
+    def register_action(
+        self,
+        action: HotkeyAction,
+        vk: int,
+        modifiers: int = 0,
+        callback: Optional[Callable[[], None]] = None,
+    ) -> int:
+        hotkey_id = self._next_id
+        self._next_id += 1
+
+        ok = self._api.RegisterHotKey(self.hwnd, hotkey_id, modifiers, vk)
+        if not ok:
+            return 0
+
+        self._registered_ids[action] = hotkey_id
+        if callback:
+            self._callbacks[hotkey_id] = callback
+        return hotkey_id
+
+    def handle_hotkey_id(self, hotkey_id: int) -> bool:
+        cb = self._callbacks.get(hotkey_id)
+        if cb:
+            cb()
+            return True
+        return False
+
+    def unregister_all(self) -> None:
+        for hotkey_id in list(self._callbacks.keys()):
+            self._api.UnregisterHotKey(self.hwnd, hotkey_id)
+        self._callbacks.clear()
+        self._registered_ids.clear()

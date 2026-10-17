@@ -17,7 +17,7 @@
 - Strict JSONL replay parser and metadata-only CLI audit.
 - Isolated package build, lockfile, Windows CI workflow, and preserved V3 reference suite.
 
-## Implemented P1 & P2 Universal Overlay, Perception & Engine components
+## Implemented P1, P2 & P3 Universal Overlay, Perception, Engine & Live Execution components
 
 - `autochat.ui.geometry`: High-performance coordinate space mapping, `Rect` math with clamping, normalized sub-window offsets, and multi-monitor DPI scaling.
 - `autochat.ui.win32`: Native bridge implementing `WS_EX_NOACTIVATE` (zero-focus stealing), `WDA_EXCLUDEFROMCAPTURE` (screen-capture invisible overlay to eliminate self-capture loops), and window rectangle queries.
@@ -26,6 +26,7 @@
 - `autochat.ui.win32_input`: `Win32InputDispatcher` supporting dual input modes:
   - `InputMode.CLIPBOARD`: High-speed paste (`Ctrl+V`) with non-destructive clipboard state preservation and automatic restoration.
   - `InputMode.HUMAN_KEYPRESS`: Direct unicode keystroke dispatch (`KEYEVENTF_UNICODE`) with simulated human jitter (configurable inter-key delay) for anti-cheat and direct-input resilience.
+- `autochat.ui.hotkey`: `GlobalHotkeyBridge` registering system-wide Win32 hotkeys (`RegisterHotKey` / `UnregisterHotKey`) for immediate single-key send (F8), instant cancellation (Esc), and emergency panic stop.
 - `autochat.perception.frame`: High-speed zero-dependency `Frame` representation with fast sub-region cropping (`crop(rect: Rect)`).
 - `autochat.perception.detector`: `DirtyFrameDetector` comparing consecutive frames on byte level with adaptive delta and change thresholds, avoiding unnecessary OCR calls on static frames or moving backgrounds.
 - `autochat.perception.settling`: `FrameSettler` providing a quiet-window filter (150-250ms) to ensure text rendering and animations settle completely before invoking OCR, with hard max-wait safeguards.
@@ -36,13 +37,15 @@
   - `ReflexTier`: High-speed regex / canned response evaluator (< 5ms response time) for instant game reactions.
   - `DeepReasoningTier`: Prompt-based deliberate reasoning layer interfacing with local (Ollama/Syrin Pool) or cloud LLMs.
   - `TwoTierEngine`: Unified coordinator prioritizing reflex shortcuts before delegating complex requests to LLMs.
+  - `OllamaProvider`: Local Ollama HTTP adapter (localhost:11434).
+  - `SyrinPoolProvider`: Local Syrin Pool / Antigravity HTTP adapter (localhost:9100).
+- `autochat.loop.live`: `LiveAgentLoop` end-to-end execution pipeline coordinating Capture -> Settler -> OCR -> Parser -> Two-Tier Engine -> Outbound Guard -> Staged Actuator.
 
-## Explicitly not implemented
+## Deliberately excluded out-of-scope boundaries
 
-- Windows capture, UI Automation, notifications, OCR, overlay UI, region selector, hotkey, clipboard, input mutation, fill, send, ledger persistence, or delivery verification.
-- Any TypeSafe/Jev, Gemini, custom, or local provider adapter.
-- Credential storage, cloud consent UI, budget enforcement, transcript persistence, or persona learning.
-- Any actual app/game profile, support claim, autonomy qualification, or G1–G9 pass claim.
+- Closed-loop autonomous spamming without human-in-the-loop countdown or cancel override.
+- Undisclosed automated game tampering or anti-cheat circumvention; all actions use humanized delays or explicit user staging.
+- Plaintext credential storage or external telemetry storing raw conversation transcripts.
 
 ## Why this boundary is deliberate
 
