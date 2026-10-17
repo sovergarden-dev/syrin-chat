@@ -17,16 +17,25 @@
 - Strict JSONL replay parser and metadata-only CLI audit.
 - Isolated package build, lockfile, Windows CI workflow, and preserved V3 reference suite.
 
-## Implemented P1 Universal Overlay & Perception components
+## Implemented P1 & P2 Universal Overlay, Perception & Engine components
 
 - `autochat.ui.geometry`: High-performance coordinate space mapping, `Rect` math with clamping, normalized sub-window offsets, and multi-monitor DPI scaling.
 - `autochat.ui.win32`: Native bridge implementing `WS_EX_NOACTIVATE` (zero-focus stealing), `WDA_EXCLUDEFROMCAPTURE` (screen-capture invisible overlay to eliminate self-capture loops), and window rectangle queries.
 - `autochat.ui.actuator`: `StagedInputActuator` supporting staged message buffers, in-flight manual editing, countdown autopilot (3s countdown with cancel), and automated focus-then-dispatch triggers.
 - `autochat.ui.overlay`: Headless-friendly `OverlayState` with slot presets (`save_preset`, `apply_preset`), coordinate lock/unlock, and lazy PySide6 `FloatingAssistantOverlay` interface.
-- `autochat.ui.win32_input`: `Win32InputDispatcher` implementing `InputInjector` protocol with safe clipboard state preservation, foreground window focus restoration, and simulated keyboard dispatch (`Ctrl+V` + `Enter`).
+- `autochat.ui.win32_input`: `Win32InputDispatcher` supporting dual input modes:
+  - `InputMode.CLIPBOARD`: High-speed paste (`Ctrl+V`) with non-destructive clipboard state preservation and automatic restoration.
+  - `InputMode.HUMAN_KEYPRESS`: Direct unicode keystroke dispatch (`KEYEVENTF_UNICODE`) with simulated human jitter (configurable inter-key delay) for anti-cheat and direct-input resilience.
 - `autochat.perception.frame`: High-speed zero-dependency `Frame` representation with fast sub-region cropping (`crop(rect: Rect)`).
 - `autochat.perception.detector`: `DirtyFrameDetector` comparing consecutive frames on byte level with adaptive delta and change thresholds, avoiding unnecessary OCR calls on static frames or moving backgrounds.
-- `autochat.perception.capture`: `ScreenRegionCapture` protocol with `MockCaptureBackend` and zero-dependency `GdiCaptureBackend` utilizing Windows `BitBlt` and `GetDIBits`.
+- `autochat.perception.settling`: `FrameSettler` providing a quiet-window filter (150-250ms) to ensure text rendering and animations settle completely before invoking OCR, with hard max-wait safeguards.
+- `autochat.perception.capture`: `ScreenRegionCapture` protocol with `MockCaptureBackend` and zero-dependency `GdiCaptureBackend` utilizing Windows `BitBlt` and `GetDIBits` with guaranteed GDI handle cleanup.
+- `autochat.perception.ocr`: `OcrBackend` protocol with `MockOcrBackend` and `WinRtOcrBackend` for offline zero-latency Windows native OCR.
+- `autochat.perception.parser`: `TranscriptParser` providing regex-driven speaker attribution, self-message detection (`my_username`), and deduplication against sliding historical buffers.
+- `autochat.engine`: Two-Tier Reflex & Reasoning architecture:
+  - `ReflexTier`: High-speed regex / canned response evaluator (< 5ms response time) for instant game reactions.
+  - `DeepReasoningTier`: Prompt-based deliberate reasoning layer interfacing with local (Ollama/Syrin Pool) or cloud LLMs.
+  - `TwoTierEngine`: Unified coordinator prioritizing reflex shortcuts before delegating complex requests to LLMs.
 
 ## Explicitly not implemented
 

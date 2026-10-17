@@ -20,12 +20,13 @@ from .win32 import (
     Win32Bridge,
 )
 
-from .win32_input import NativeWin32InputApi, Win32InputDispatcher
+from .win32_input import InputMode, NativeWin32InputApi, Win32InputDispatcher
 
 __all__ = [
     "DpiScale",
     "FloatingAssistantOverlay",
     "InputInjector",
+    "InputMode",
     "NativeWin32InputApi",
     "NormalizedRect",
     "OverlayConfig",
