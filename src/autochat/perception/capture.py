@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import ctypes
-from ctypes import Structure, c_long, c_short, c_uint, byref
+from ctypes import Structure, c_int, c_long, c_short, c_uint, c_void_p, byref
 from typing import Optional, Protocol, runtime_checkable
 from ..ui.geometry import Rect
 from .frame import Frame
@@ -57,9 +57,40 @@ class GdiCaptureBackend:
         try:
             self._user32 = ctypes.windll.user32
             self._gdi32 = ctypes.windll.gdi32
+            self._setup_signatures()
         except (AttributeError, OSError):
             self._user32 = None
             self._gdi32 = None
+
+    def _setup_signatures(self) -> None:
+        if not self._user32 or not self._gdi32:
+            return
+        self._user32.GetDesktopWindow.restype = c_void_p
+        self._user32.GetDC.argtypes = [c_void_p]
+        self._user32.GetDC.restype = c_void_p
+        self._user32.ReleaseDC.argtypes = [c_void_p, c_void_p]
+        self._user32.ReleaseDC.restype = c_int
+
+        self._gdi32.CreateCompatibleDC.argtypes = [c_void_p]
+        self._gdi32.CreateCompatibleDC.restype = c_void_p
+        self._gdi32.CreateCompatibleBitmap.argtypes = [c_void_p, c_int, c_int]
+        self._gdi32.CreateCompatibleBitmap.restype = c_void_p
+        self._gdi32.SelectObject.argtypes = [c_void_p, c_void_p]
+        self._gdi32.SelectObject.restype = c_void_p
+        self._gdi32.DeleteObject.argtypes = [c_void_p]
+        self._gdi32.DeleteObject.restype = c_int
+        self._gdi32.DeleteDC.argtypes = [c_void_p]
+        self._gdi32.DeleteDC.restype = c_int
+        self._gdi32.BitBlt.argtypes = [
+            c_void_p, c_int, c_int, c_int, c_int,
+            c_void_p, c_int, c_int, c_uint
+        ]
+        self._gdi32.BitBlt.restype = c_int
+        self._gdi32.GetDIBits.argtypes = [
+            c_void_p, c_void_p, c_uint, c_uint,
+            c_void_p, c_void_p, c_uint
+        ]
+        self._gdi32.GetDIBits.restype = c_int
 
     @property
     def is_available(self) -> bool:

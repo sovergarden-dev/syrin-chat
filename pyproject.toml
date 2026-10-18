@@ -40,6 +40,7 @@ docs = ["Markdown==3.8.2"]
 [project.scripts]
 autochat-replay = "autochat.cli:main"
 autochat-live = "autochat.cli_live:main_live"
+autochat-smoke = "autochat.cli_smoke:main_smoke"
 
 [tool.setuptools.package-dir]
 "" = "src"
