@@ -67,6 +67,7 @@ class FrameSettler:
                 self._last_change_time = None
                 self._first_change_time = None
                 self._candidate_frame = None
+                self.detector.reset()
                 return result_frame
 
             return None
@@ -90,6 +91,7 @@ class FrameSettler:
                 self._last_change_time = None
                 self._first_change_time = None
                 self._candidate_frame = None
+                self.detector.reset()
                 return result_frame
 
         return None
