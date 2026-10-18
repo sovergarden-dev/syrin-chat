@@ -19,9 +19,36 @@ class NativeWin32InputApi:
         try:
             self._user32 = ctypes.windll.user32
             self._kernel32 = ctypes.windll.kernel32
+            self._setup_signatures()
         except (AttributeError, OSError):
             self._user32 = None
             self._kernel32 = None
+
+    def _setup_signatures(self) -> None:
+        if not self._user32 or not self._kernel32:
+            return
+        from ctypes import c_int, c_size_t, c_uint, c_void_p
+        self._user32.GetForegroundWindow.restype = c_void_p
+        self._user32.SetForegroundWindow.argtypes = [c_void_p]
+        self._user32.SetForegroundWindow.restype = c_int
+
+        self._user32.OpenClipboard.argtypes = [c_void_p]
+        self._user32.OpenClipboard.restype = c_int
+        self._user32.CloseClipboard.restype = c_int
+        self._user32.EmptyClipboard.restype = c_int
+        self._user32.GetClipboardData.argtypes = [c_uint]
+        self._user32.GetClipboardData.restype = c_void_p
+        self._user32.SetClipboardData.argtypes = [c_uint, c_void_p]
+        self._user32.SetClipboardData.restype = c_void_p
+
+        self._kernel32.GlobalAlloc.argtypes = [c_uint, c_size_t]
+        self._kernel32.GlobalAlloc.restype = c_void_p
+        self._kernel32.GlobalLock.argtypes = [c_void_p]
+        self._kernel32.GlobalLock.restype = c_void_p
+        self._kernel32.GlobalUnlock.argtypes = [c_void_p]
+        self._kernel32.GlobalUnlock.restype = c_int
+        self._kernel32.GlobalFree.argtypes = [c_void_p]
+        self._kernel32.GlobalFree.restype = c_void_p
 
     @property
     def is_available(self) -> bool:

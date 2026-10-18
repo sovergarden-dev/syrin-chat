@@ -15,8 +15,18 @@ class NativeUser32HotkeyApi:
     def __init__(self) -> None:
         try:
             self._user32 = ctypes.windll.user32
+            self._setup_signatures()
         except (AttributeError, OSError):
             self._user32 = None
+
+    def _setup_signatures(self) -> None:
+        if not self._user32:
+            return
+        from ctypes import c_int, c_uint, c_void_p
+        self._user32.RegisterHotKey.argtypes = [c_void_p, c_int, c_uint, c_uint]
+        self._user32.RegisterHotKey.restype = c_int
+        self._user32.UnregisterHotKey.argtypes = [c_void_p, c_int]
+        self._user32.UnregisterHotKey.restype = c_int
 
     @property
     def is_available(self) -> bool:
