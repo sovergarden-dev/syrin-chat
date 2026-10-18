@@ -34,6 +34,30 @@ class CliLiveTests(unittest.TestCase):
         last_obj = json.loads(lines[-1])
         self.assertEqual(last_obj["steps_executed"], 3)
 
+    def test_cli_live_custom_roi_and_provider(self) -> None:
+        stdout_buf = io.StringIO()
+        with patch("sys.stdout", stdout_buf):
+            exit_code = main_live([
+                "--roi", "10,20,200,100",
+                "--provider", "syrin",
+                "--once",
+            ])
+
+        self.assertEqual(exit_code, 0)
+        output = stdout_buf.getvalue()
+        last_obj = json.loads(output.splitlines()[-1])
+        self.assertEqual(last_obj["status"], "completed")
+
+    def test_cli_live_real_flag_runs_safely(self) -> None:
+        stdout_buf = io.StringIO()
+        with patch("sys.stdout", stdout_buf):
+            exit_code = main_live(["--real", "--once"])
+
+        self.assertEqual(exit_code, 0)
+        output = stdout_buf.getvalue()
+        last_obj = json.loads(output.splitlines()[-1])
+        self.assertEqual(last_obj["status"], "completed")
+
 
 if __name__ == "__main__":
     unittest.main()

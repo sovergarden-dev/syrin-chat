@@ -70,6 +70,12 @@ class HotkeyBridgeTests(unittest.TestCase):
         self.bridge.unregister_all()
         self.assertEqual(len(self.mock_api.registered_hotkeys), 0)
 
+    def test_make_qt_hotkey_filter(self) -> None:
+        from autochat.ui.hotkey import make_qt_hotkey_filter
+        qt_filter = make_qt_hotkey_filter(self.bridge)
+        # In environment without PySide6 GUI loop, it either returns filter instance or None safely
+        self.assertTrue(qt_filter is None or hasattr(qt_filter, "nativeEventFilter"))
+
 
 if __name__ == "__main__":
     unittest.main()
