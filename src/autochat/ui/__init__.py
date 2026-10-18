@@ -20,7 +20,13 @@ from .win32 import (
     Win32Bridge,
 )
 
-from .hotkey import GlobalHotkeyBridge, HotkeyAction, NativeUser32HotkeyApi
+from .hotkey import (
+    GlobalHotkeyBridge,
+    HotkeyAction,
+    NativeUser32HotkeyApi,
+    WM_HOTKEY,
+    make_qt_hotkey_filter,
+)
 from .win32_input import InputMode, NativeWin32InputApi, Win32InputDispatcher
 
 __all__ = [
@@ -41,6 +47,7 @@ __all__ = [
     "WDA_EXCLUDEFROMCAPTURE",
     "WDA_MONITOR",
     "WDA_NONE",
+    "WM_HOTKEY",
     "WS_EX_LAYERED",
     "WS_EX_NOACTIVATE",
     "WS_EX_TOPMOST",
@@ -49,6 +56,7 @@ __all__ = [
     "Win32InputDispatcher",
     "WindowAnchor",
     "is_qt_available",
+    "make_qt_hotkey_filter",
     "setup_overlay_window",
 ]
 

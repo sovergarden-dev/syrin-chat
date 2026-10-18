@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import ctypes
-from ctypes import Structure, c_long, byref
+from ctypes import Structure, c_int, c_long, c_ssize_t, c_uint, c_void_p, byref
 from typing import Any, Optional
 from .geometry import Rect
 
@@ -36,8 +36,27 @@ class Win32Bridge:
         else:
             try:
                 self._user32 = ctypes.windll.user32
+                self._setup_signatures()
             except (AttributeError, OSError):
                 self._user32 = None
+
+    def _setup_signatures(self) -> None:
+        if not self._user32:
+            return
+        if hasattr(self._user32, "GetWindowLongPtrW"):
+            self._user32.GetWindowLongPtrW.argtypes = [c_void_p, c_int]
+            self._user32.GetWindowLongPtrW.restype = c_ssize_t
+        if hasattr(self._user32, "SetWindowLongPtrW"):
+            self._user32.SetWindowLongPtrW.argtypes = [c_void_p, c_int, c_ssize_t]
+            self._user32.SetWindowLongPtrW.restype = c_ssize_t
+        self._user32.GetWindowRect.argtypes = [c_void_p, c_void_p]
+        self._user32.GetWindowRect.restype = c_int
+        self._user32.GetForegroundWindow.restype = c_void_p
+        self._user32.SetForegroundWindow.argtypes = [c_void_p]
+        self._user32.SetForegroundWindow.restype = c_int
+        if hasattr(self._user32, "SetWindowDisplayAffinity"):
+            self._user32.SetWindowDisplayAffinity.argtypes = [c_void_p, c_uint]
+            self._user32.SetWindowDisplayAffinity.restype = c_int
 
     @property
     def is_available(self) -> bool:
@@ -47,9 +66,13 @@ class Win32Bridge:
         if not self._user32:
             return False
         try:
-            current_style = self._user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+            get_fn = getattr(self._user32, "GetWindowLongPtrW", getattr(self._user32, "GetWindowLongW", None))
+            set_fn = getattr(self._user32, "SetWindowLongPtrW", getattr(self._user32, "SetWindowLongW", None))
+            if not get_fn or not set_fn:
+                return False
+            current_style = get_fn(hwnd, GWL_EXSTYLE)
             new_style = current_style | WS_EX_NOACTIVATE
-            self._user32.SetWindowLongW(hwnd, GWL_EXSTYLE, new_style)
+            set_fn(hwnd, GWL_EXSTYLE, new_style)
             return True
         except Exception:
             return False

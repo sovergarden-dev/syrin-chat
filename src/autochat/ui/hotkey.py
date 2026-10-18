@@ -87,3 +87,44 @@ class GlobalHotkeyBridge:
             self._api.UnregisterHotKey(self.hwnd, hotkey_id)
         self._callbacks.clear()
         self._registered_ids.clear()
+
+    @property
+    def is_available(self) -> bool:
+        return self._api.is_available
+
+
+WM_HOTKEY = 0x0312
+MOD_ALT = 0x0001
+MOD_CONTROL = 0x0002
+MOD_SHIFT = 0x0004
+MOD_WIN = 0x0008
+MOD_NOREPEAT = 0x4000
+
+
+def make_qt_hotkey_filter(bridge: GlobalHotkeyBridge) -> Any:
+    """Creates a QAbstractNativeEventFilter for PySide6 integration when available."""
+    try:
+        from PySide6.QtCore import QAbstractNativeEventFilter  # type: ignore
+    except ImportError:
+        return None
+
+    class _QtNativeFilter(QAbstractNativeEventFilter):
+        def __init__(self, b: GlobalHotkeyBridge) -> None:
+            super().__init__()
+            self._bridge = b
+
+        def nativeEventFilter(self, event_type: Any, message: Any) -> Any:
+            if event_type in (b"windows_generic_MSG", "windows_generic_MSG"):
+                try:
+                    import ctypes
+                    from ctypes import wintypes
+                    msg = wintypes.MSG.from_address(int(message))
+                    if msg.message == WM_HOTKEY:
+                        if self._bridge.handle_hotkey_id(int(msg.wParam)):
+                            return True, 0
+                except Exception:
+                    pass
+            return False, 0
+
+    return _QtNativeFilter(bridge)
+
